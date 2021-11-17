@@ -113,9 +113,35 @@
             client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
 
                 //var objectify = JSON.parse(message.payloadString) // to get the contents of the message use a function outside this 
-                console.log(message);
-            };
 
+                var objectify = JSON.parse(message.payloadString) // to get the contents of the message use a function outside this 
+                    //  console.log("objectify");
+
+                if (objectify.hasOwnProperty('deviceId')) {
+                    var messageTaken = objectify
+                        //   console.log(messageTaken[0])
+
+                } else {
+                    var messageTaken2 = objectify
+                        //console.log(messageTaken2)
+                    var allCoordinates = JSON.parse(messageTaken2)
+
+                    var array2 = [
+                        allCoordinates[0],
+                        allCoordinates[1],
+                        allCoordinates[2],
+                        allCoordinates[3],
+                    ]
+
+                    array2.forEach(function(e) {
+                        var marker = new mapboxgl.Marker()
+                            .setLngLat(e) // variable 
+                            .setPopup(new mapboxgl.Popup()
+                                .setHTML('<h6>Reykjavik Roasters</h6><p>A good coffee shop</p><button>Book</button>'))
+                            .addTo(map);
+                    })
+                };
+            }
 
 
 
@@ -143,7 +169,7 @@
             function subscribeToTopic() {
                 //GET SELECTED TOPIC
                 var topic = this.retrieveTopic()
-                client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
+                    //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
 
                 console.log(topic)
                     // we do not end the subscription until the topic is a valid type
@@ -317,45 +343,7 @@
                 center: [11.942625, 57.685259], //starting position [lng, lat]
                 zoom: 10, // starting zoom
             })
-
-            var popup = new mapboxgl.Popup()
-                .setHTML('<h6>Reykjavik Roasters</h6><p>A good coffee shop</p><button>Book</button>');
-
-            var marker = new mapboxgl.Marker()
-                .setLngLat([11.974560, 57.708870]) // variable 
-                .setPopup(popup)
-                .addTo(map);
         </script>
 </body>
 
 </html>
-
-<!-- 
-1. Create a geojson object variable.
-
-
-    var geojson = {
-    "name":"NewFeatureType",
-    "type":"FeatureCollection",
-    "features":[{
-        "type":"Feature",
-        "geometry":{
-            "type":"LineString",
-            "coordinates":[]
-        },
-        "properties":null
-    }]
-};
-
-2. then you do pushing into coordinates array
-
-geojson.features[0].geometry.coordinates.push([lat, lng]);
-
-
-"features":[{ is an array and in the first index of that array there is an object. Therefore, it must be referenced like so, geojson.features[0].geometry. If its written like this: "features":{ without the [ then it should be referenced like this: geojson.features.geometry
-
-    https://stackoverflow.com/questions/30579655/generating-geojson-with-javascript
-
-
-
--->
