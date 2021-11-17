@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Load GeoJSON</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            height: 500px
+        }
+    </style>
+
+
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+
+    <!--jQuery library to populate the options using a function-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+
+    <!-- MAPBOX -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+
+<body>
+    <script src='paho-mqtt.js'>
+    </script>
+
+    <script>
+    </script>
+    <ul id='message-list'></ul>
+
+    <div id="content" class="container-fluid fill-height">
+        <div id='map'></div>
+        <h1>Dentistimo</h1>
+
+        <button onclick="bookChoice()">Book</button>
+
+        <ul class="list-unstyled components">
+            <!--<p class="para">year/month/week/wday/hour</p>-->
+            <label for="yearSelect">Select year:</label>
+            <select name="yearDropDown" id="yearSelect">
+        <option value="#">All</option>
+        <option value="2021">2021</option>
+        <option value="2020">2020</option>
+        <option value="2019">2019</option>
+        <option value="2018">2018</option>
+      </select>
+
+            <label for="monthSelect">Select month:</label>
+            <select class="1-12" name="monthDropDown" id="monthSelect">
+        <option value="#">All</option>
+      </select>
+
+            <label for="weekSelect">Select week:</label>
+            <select class="1-53" name="weekDropDown" id="weekSelect">
+        <option value="#">All</option>
+      </select>
+
+            <label for="daySelect">Select day:</label>
+            <select name="dayDropDown" id="daySelect">
+        <option value="#">All</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>
+      </select>
+
+            <label for="hourSelect">Select hour:</label>
+            <select class="0-23" name="hourDropDown" id="hourSelect">
+        <option value="#">All</option>
+      </select>
+            <label for="minuteSelect">Select minutes:</label>
+
+            <select name="minuteDropdown" id="minuteSelect">
+        <option value="#">All</option>
+                <option value=0>00</option>
+        <option value=30>30</option>
+
+      </select>
+            <button type="button" class="btn btn-secondary" onclick="subscribeToTopic();">
+        Subscribe
+      </button>
+        </ul>
+
+        <script>
+            var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
+            client.connect({
+                onSuccess: function() {
+                    console.log('connected');
+                    client.subscribe('ramzimkoqaz1984qwe'); // get js object from data handler
+
+                }
+            });
+            client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
+
+                //var objectify = JSON.parse(message.payloadString) // to get the contents of the message use a function outside this 
+                console.log(message);
+            };
+
+
+
+
+            $(function() {
+                var $select = $('.1-12')
+                for (i = 1; i <= 12; i++) {
+                    $select.append($('<option></option>').val(i).html(i))
+                }
+            })
+
+            $(function() {
+                var $select = $('.1-53')
+                for (i = 1; i <= 53; i++) {
+                    $select.append($('<option></option>').val(i).html(i))
+                }
+            })
+
+            $(function() {
+                var $select = $('.0-23')
+                for (i = 0; i <= 23; i++) {
+                    $select.append($('<option></option>').val(i).html(i))
+                }
+            })
+
+            function subscribeToTopic() {
+                //GET SELECTED TOPIC
+                var topic = this.retrieveTopic()
+                client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
+
+                console.log(topic)
+                    // we do not end the subscription until the topic is a valid type
+                if (typeof previousTopic !== 'undefined') {
+                    client.unsubscribe(previousTopic)
+                }
+                previousTopic = topic
+            }
+
+            // the topic will recieve should either contain the number, or # for all, or + and a number
+            var retrieveTopic = function() {
+                var newTopic = ''
+                var fullTopic = ''
+                var year = document.getElementById('yearSelect').value
+                var month = document.getElementById('monthSelect').value
+                var week = document.getElementById('weekSelect').value
+                var day = document.getElementById('daySelect').value
+                var hour = document.getElementById('hourSelect').value
+                var minutes = document.getElementById('minuteSelect').value
+                if (
+                    year == '#' &&
+                    month == '#' &&
+                    week == '#' &&
+                    day == '#' &&
+                    hour == '#' &&
+                    minutes == '#'
+
+                ) {
+                    fullTopic = '#'
+                } else if (month == '#' && week == '#' && day == '#' && hour == '#' && minute == '#') {
+                    fullTopic = year + '/' + '#'
+                } else if (week == '#' && day == '#' && hour == '#' && minute == '#') {
+                    if (year == '#') {
+                        year = '+'
+                    }
+                    fullTopic = newTopic.concat(year + '/' + month + '/' + '#')
+                } else if (day == '#' && hour == '#') {
+                    if (year == '#') {
+                        year = '+'
+                    }
+                    if (month == '#') {
+                        month = '+'
+                    }
+                    fullTopic = newTopic.concat(
+                        year + '/' + month + '/' + week + '/' + '#'
+                    )
+                } else if (hour == '#') {
+                    if (year == '#') {
+                        year = '+'
+                    }
+                    if (month == '#') {
+                        month = '+'
+                    }
+                    if (week == '#') {
+                        week = '+'
+                    }
+                    fullTopic = newTopic.concat(
+                        year + '/' + month + '/' + week + '/' + day + '/' + '#'
+                    )
+                } else {
+                    if (year == '#') {
+                        year = '+'
+                    }
+                    if (month == '#') {
+                        month = '+'
+                    }
+                    if (week == '#') {
+                        week = '+'
+                    }
+                    if (day == '#') {
+                        day = '+'
+                    }
+                    fullTopic = newTopic.concat(
+                        year + '/' + month + '/' + week + '/' + day + '/' + hour + '/' + minutes
+                    )
+                }
+
+                return fullTopic
+            }
+
+            function clientData(request) {
+                var emptyObj = {
+                    deviceId: "",
+                    requestId: "",
+                    bookingTime: "",
+                    issuance: "",
+                    dentistID: "",
+                    clientTime: "",
+                    clientCoordinates: ""
+                };
+                //console.log(emptyObj);
+                var idFilled = this.idGenerate(emptyObj, request);
+                var timeFilled = this.timeGenerate(idFilled);
+                var issuanceFilled = this.issuanceGenerate(timeFilled)
+                var dentistIDFilled = this.addDentistId(issuanceFilled); // THIS IS DEMO ONLY we are supposed to take this from the marker (the marker should have coordinates and dentist id and times and address)
+                var preferredTimeByClient = this.addClientTime(dentistIDFilled); // THIS IS DEMO ONLY we are supposed to take this from the dataHandler when we have a map with coordinates and click book we are supposed to know the time that the client have chosen
+                var dentistCoordinates = this.addClientCoordinates(preferredTimeByClient);
+                var completedStringified = JSON.stringify(dentistCoordinates);
+                return completedStringified;
+            }
+
+            function idGenerate(emptyVar, requesting) {
+
+                emptyVar.deviceId = parseInt(Math.random() * (500000 - 1) + 1); // create device id inside client object
+                emptyVar.requestId = requesting; // create requestId variable inside client object
+                return emptyVar;
+            }
+
+            function issuanceGenerate(emptyVar) {
+                var currentTime = Date.now();
+                emptyVar.issuance = currentTime; // create issuance variable for client object
+                return emptyVar;
+            }
+
+            function timeGenerate(emptyVar) {
+
+                Date.now()
+                var newTime = new Date()
+
+                var currentHour = newTime.getHours();
+
+                var currentMinute = newTime.getMinutes();
+                var currentDayOfMonth = newTime.getDay();
+                var currentMonth = newTime.getMonth(); // Be careful! January is 0, not 1
+                var currentYear = newTime.getFullYear();
+
+                var dateString = currentHour + ":" + currentMinute + " " + currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
+                emptyVar.bookingTime = dateString; // we create a variable inside the client object
+
+                return emptyVar;
+            }
+
+            function addDentistId(emptyVar) {
+                idExtracted = "1"; // this should be dynamically filled 
+                emptyVar.dentistID = idExtracted;
+                return emptyVar
+            }
+
+            function addClientTime(emptyVar) {
+                clientTime = "2019/5/6/Wednesday/10/30"; // this should be dynamically filled 
+                emptyVar.clientTime = clientTime;
+                return emptyVar
+            }
+
+            function addClientCoordinates(emptyVar) {
+                clientCoordinates = "[11.969388,57.707619]"; // this should be dynamically filled 
+                emptyVar.clientCoordinates = clientCoordinates;
+                return emptyVar
+            }
+            var bookChoice = function() {
+
+                var userData = this.clientData()
+                console.log(userData)
+                client.publish('ramzimkoqaz1984qwe2', userData)
+
+                // we do not end the subscription until the topic is a valid type
+                if (typeof previousTopic !== 'undefined') {
+                    client.unsubscribe(previousTopic)
+
+                }
+            }
+
+
+            // access token
+            mapboxgl.accessToken = 'pk.eyJ1IjoibWtvcWF6IiwiYSI6ImNrdnRlanNnZjJ1amcycWtsbmFjN2xscXUifQ.MDV-Vx3y_vY_DM-YFF9eGw'
+
+            // javascript to instantiate the map
+            const map = new mapboxgl.Map({
+                container: 'map', // appear in the container with the id called map
+                style: 'mapbox://styles/mapbox/streets-v9', // style URL
+                center: [11.942625, 57.685259], //starting position [lng, lat]
+                zoom: 10, // starting zoom
+            })
+
+            var popup = new mapboxgl.Popup()
+                .setHTML('<h6>Reykjavik Roasters</h6><p>A good coffee shop</p><button>Book</button>');
+
+            var marker = new mapboxgl.Marker()
+                .setLngLat([11.974560, 57.708870]) // variable 
+                .setPopup(popup)
+                .addTo(map);
+        </script>
+</body>
+
+</html>
+
+<!-- 
+1. Create a geojson object variable.
+
+
+    var geojson = {
+    "name":"NewFeatureType",
+    "type":"FeatureCollection",
+    "features":[{
+        "type":"Feature",
+        "geometry":{
+            "type":"LineString",
+            "coordinates":[]
+        },
+        "properties":null
+    }]
+};
+
+2. then you do pushing into coordinates array
+
+geojson.features[0].geometry.coordinates.push([lat, lng]);
+
+
+"features":[{ is an array and in the first index of that array there is an object. Therefore, it must be referenced like so, geojson.features[0].geometry. If its written like this: "features":{ without the [ then it should be referenced like this: geojson.features.geometry
+
+    https://stackoverflow.com/questions/30579655/generating-geojson-with-javascript
+
+
+
+-->
