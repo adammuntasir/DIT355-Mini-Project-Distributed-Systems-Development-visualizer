@@ -53,26 +53,25 @@
 
         <ul class="list-unstyled components">
             <!--<p class="para">year/month/week/wday/hour</p>-->
-            <label for="yearSelect">Select year:</label>
+            <label for="yearSelect">Select Year:</label>
             <select name="yearDropDown" id="yearSelect">
         <option value="#">All</option>
         <option value="2021">2021</option>
-        <option value="2020">2020</option>
-        <option value="2019">2019</option>
-        <option value="2018">2018</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
       </select>
 
-            <label for="monthSelect">Select month:</label>
+            <label for="monthSelect">Select Month:</label>
             <select class="1-12" name="monthDropDown" id="monthSelect">
         <option value="#">All</option>
       </select>
 
-            <label for="weekSelect">Select week:</label>
-            <select class="1-53" name="weekDropDown" id="weekSelect">
+            <label for="weekSelect">Select Day:</label>
+            <select class="1-31" name="weekDropDown" id="weekSelect">
         <option value="#">All</option>
       </select>
 
-            <label for="daySelect">Select day:</label>
+            <label for="daySelect">Select Week Day:</label>
             <select name="dayDropDown" id="daySelect">
         <option value="#">All</option>
         <option value="Monday">Monday</option>
@@ -84,15 +83,15 @@
         <option value="Sunday">Sunday</option>
       </select>
 
-            <label for="hourSelect">Select hour:</label>
+            <label for="hourSelect">Select Hour:</label>
             <select class="0-23" name="hourDropDown" id="hourSelect">
         <option value="#">All</option>
       </select>
-            <label for="minuteSelect">Select minutes:</label>
+            <label for="minuteSelect">Select Minutes:</label>
 
             <select name="minuteDropdown" id="minuteSelect">
         <option value="#">All</option>
-                <option value=0>00</option>
+                <option value=00>00</option>
         <option value=30>30</option>
 
       </select>
@@ -111,38 +110,51 @@
                 }
             });
             client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
+                if (message.payloadString.length > 800) {
 
-                //var objectify = JSON.parse(message.payloadString) // to get the contents of the message use a function outside this 
+                    var topicArgument = retrieveTopic() // the date chosen by the user
 
-                var objectify = JSON.parse(message.payloadString) // to get the contents of the message use a function outside this 
-                    //  console.log("objectify");
+                    var allCoordinates = new Array(); // create empty array to insert coordinates 
 
-                if (objectify.hasOwnProperty('deviceId')) {
-                    var messageTaken = objectify
-                        //   console.log(messageTaken[0])
+                    var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
+                        /*
+                                            var countKey = Object.keys(wholeJSON.dentists).length; // how many elements in the array
+                                            for (var m = 0; m < countKey; m++) {
+                                                allCoordinates[m] = wholeJSON.dentists[m].coordinate // save all coordinates
+                                            }
+                                            var allCoordinatesString = JSON.stringify(allCoordinates)
+                                            var withoutQuotes = allCoordinatesString.replace(/"/g, ''); // remove the quotes 
+                                            var readyForMap = JSON.parse(withoutQuotes) // make the coordinates without quotes 
+                        */
 
-                } else {
-                    var messageTaken2 = objectify
-                        //console.log(messageTaken2)
-                    var allCoordinates = JSON.parse(messageTaken2)
-
-                    var array2 = [
-                        allCoordinates[0],
-                        allCoordinates[1],
-                        allCoordinates[2],
-                        allCoordinates[3],
-                    ]
-
-                    array2.forEach(function(e) {
+                    wholeJSON.dentists.forEach(function(e) {
                         var marker = new mapboxgl.Marker()
-                            .setLngLat(e) // variable 
+                            .setLngLat(e.coordinate) // variable 
                             .setPopup(new mapboxgl.Popup()
-                                .setHTML('<h6>Reykjavik Roasters</h6><p>A good coffee shop</p><button>Book</button>'))
-                            .addTo(map);
-                    })
-                };
-            }
+                                .setHTML(
+                                    `<h5>${JSON.stringify(e.name)}</h5> 
+                                    <h6>${JSON.stringify(e.address)}</h6> 
+    <button   class="btn" >Book</button>`
+                                ))
 
+                        .addTo(map)
+                        var topicReady = JSON.stringify(topicArgument)
+                        marker.getElement().addEventListener('click', () => {
+                            bookChoice(e.id, topicReady);
+                        })
+
+                        /*
+                                 document.getElementsByClassName("btn")[0].addEventListener('mouseover', () => {bookChoice();})
+
+                            marker.getElement().addEventListener('click', () => {
+                                                    bookChoice();})
+                        */
+                    });
+                } else {
+                    console.log(message.payloadString)
+                }
+
+            }
 
 
             $(function() {
@@ -153,8 +165,8 @@
             })
 
             $(function() {
-                var $select = $('.1-53')
-                for (i = 1; i <= 53; i++) {
+                var $select = $('.1-31')
+                for (i = 1; i <= 31; i++) {
                     $select.append($('<option></option>').val(i).html(i))
                 }
             })
@@ -166,17 +178,19 @@
                 }
             })
 
+            var previousTopic = null
+
             function subscribeToTopic() {
                 //GET SELECTED TOPIC
                 var topic = this.retrieveTopic()
                     //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
 
-                console.log(topic)
+                client.publish('ramzimkoqaz1984qwe2', topic)
                     // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe(previousTopic)
+                    client.unsubscribe('ramzimkoqaz1984qwe2')
                 }
-                previousTopic = topic
+                previousTopic = 'ramzimkoqaz1984qwe2'
             }
 
             // the topic will recieve should either contain the number, or # for all, or + and a number
@@ -250,9 +264,9 @@
                 return fullTopic
             }
 
-            function clientData(request) {
+            function clientData(dentistId, timeChosen) {
                 var emptyObj = {
-                    deviceId: "",
+                    clientId: "",
                     requestId: "",
                     bookingTime: "",
                     issuance: "",
@@ -261,20 +275,21 @@
                     clientCoordinates: ""
                 };
                 //console.log(emptyObj);
-                var idFilled = this.idGenerate(emptyObj, request);
+                var idFilled = this.idGenerate(emptyObj, dentistId, timeChosen);
                 var timeFilled = this.timeGenerate(idFilled);
                 var issuanceFilled = this.issuanceGenerate(timeFilled)
-                var dentistIDFilled = this.addDentistId(issuanceFilled); // THIS IS DEMO ONLY we are supposed to take this from the marker (the marker should have coordinates and dentist id and times and address)
-                var preferredTimeByClient = this.addClientTime(dentistIDFilled); // THIS IS DEMO ONLY we are supposed to take this from the dataHandler when we have a map with coordinates and click book we are supposed to know the time that the client have chosen
-                var dentistCoordinates = this.addClientCoordinates(preferredTimeByClient);
+                var dentistCoordinates = this.addClientCoordinates(issuanceFilled);
                 var completedStringified = JSON.stringify(dentistCoordinates);
                 return completedStringified;
             }
 
-            function idGenerate(emptyVar, requesting) {
+            function idGenerate(emptyVar, dentistId, timeChosen) {
 
-                emptyVar.deviceId = parseInt(Math.random() * (500000 - 1) + 1); // create device id inside client object
-                emptyVar.requestId = requesting; // create requestId variable inside client object
+                emptyVar.clientId = parseInt(Math.random() * (500000 - 1) + 1); // create client id inside client object
+                emptyVar.requestId = dentistId + parseInt(Math.random() * ((dentistId * 153) / 2 - 1) + 1);; // create requestId variable inside client object
+                emptyVar.dentistID = dentistId; // create requestId variable inside client object
+
+                emptyVar.clientTime = timeChosen;
                 return emptyVar;
             }
 
@@ -302,34 +317,30 @@
                 return emptyVar;
             }
 
-            function addDentistId(emptyVar) {
-                idExtracted = "1"; // this should be dynamically filled 
-                emptyVar.dentistID = idExtracted;
-                return emptyVar
-            }
-
-            function addClientTime(emptyVar) {
-                clientTime = "2019/5/6/Wednesday/10/30"; // this should be dynamically filled 
-                emptyVar.clientTime = clientTime;
-                return emptyVar
-            }
+            var previousTopic2 = null
 
             function addClientCoordinates(emptyVar) {
                 clientCoordinates = "[11.969388,57.707619]"; // this should be dynamically filled 
                 emptyVar.clientCoordinates = clientCoordinates;
                 return emptyVar
             }
-            var bookChoice = function() {
-
-                var userData = this.clientData()
+            var bookChoice = function(dentistId, time) {
+                //console.log(time)
+                var userData = this.clientData(dentistId, time)
                 console.log(userData)
                 client.publish('ramzimkoqaz1984qwe2', userData)
 
-                // we do not end the subscription until the topic is a valid type
-                if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe(previousTopic)
+                var timeout = setTimeout("location.reload(true);", 4000);
 
+                function resetTimeout() {
+                    clearTimeout(timeout);
+                    timeout = setTimeout("location.reload(true);", 4000);
                 }
+                // we do not end the subscription until the topic is a valid type
+                if (typeof previousTopic2 !== 'undefined') {
+                    client.unsubscribe('ramzimkoqaz1984qwe2')
+                }
+
             }
 
 
