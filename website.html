@@ -16,6 +16,7 @@
         #map {
             height: 500px
         }
+        /* The Modal (background) */
     </style>
 
 
@@ -99,7 +100,6 @@
         Subscribe
       </button>
         </ul>
-
         <script>
             var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
             client.connect({
@@ -134,16 +134,23 @@
                                 .setHTML(
                                     `<h5>${JSON.stringify(e.name)}</h5> 
                                     <h6>${JSON.stringify(e.address)}</h6> 
-    <button   onclieck="bookChoice()" >Book</button>`
+    <button  onclick= ${"bookChoice(e.id, topicReady)"}  >Book</button>`
                                 ))
 
                         .addTo(map)
                         var topicReady = JSON.stringify(topicArgument)
+
                         marker.getElement().addEventListener('click', () => {
                             bookChoice(e.id, topicReady);
                         })
 
                         /*
+ onclick= ${"bookChoice(e.id, topicReady)"} 
+
+                        marker.getElement().addEventListener('click', () => {
+                            bookChoice(e.id, topicReady);
+                        })
+
                                  document.getElementsByClassName("btn")[0].addEventListener('mouseover', () => {bookChoice();})
 
                             marker.getElement().addEventListener('click', () => {
@@ -158,6 +165,7 @@
                         var messageTaken3 = objectify
                         console.log("Booking Response")
                         console.log(messageTaken3)
+
 
                     }
 
@@ -350,6 +358,8 @@
                 zoom: 10, // starting zoom
             })
         </script>
+
+
 </body>
 
 </html>
