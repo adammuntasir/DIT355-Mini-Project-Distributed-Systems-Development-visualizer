@@ -134,7 +134,7 @@
                                 .setHTML(
                                     `<h5>${JSON.stringify(e.name)}</h5> 
                                     <h6>${JSON.stringify(e.address)}</h6> 
-    <button   class="btn" >Book</button>`
+    <button   onclieck="bookChoice()" >Book</button>`
                                 ))
 
                         .addTo(map)
@@ -150,10 +150,18 @@
                                                     bookChoice();})
                         */
                     });
-                } else {
-                    console.log(message.payloadString)
-                }
+                } else if (message.payloadString[0] === "{") {
 
+                    var objectify = JSON.parse(message.payloadString)
+
+                    if (objectify.hasOwnProperty('time')) {
+                        var messageTaken3 = objectify
+                        console.log("Booking Response")
+                        console.log(messageTaken3)
+
+                    }
+
+                }
             }
 
 
@@ -266,30 +274,38 @@
 
             function clientData(dentistId, timeChosen) {
                 var emptyObj = {
-                    clientId: "",
+                    userId: "",
                     requestId: "",
-                    bookingTime: "",
-                    issuance: "",
                     dentistID: "",
-                    clientTime: "",
-                    clientCoordinates: ""
+                    issuance: "",
+                    date: "",
                 };
                 //console.log(emptyObj);
                 var idFilled = this.idGenerate(emptyObj, dentistId, timeChosen);
-                var timeFilled = this.timeGenerate(idFilled);
-                var issuanceFilled = this.issuanceGenerate(timeFilled)
-                var dentistCoordinates = this.addClientCoordinates(issuanceFilled);
-                var completedStringified = JSON.stringify(dentistCoordinates);
+                var issuanceFilled = this.issuanceGenerate(idFilled)
+                var completedStringified = JSON.stringify(issuanceFilled);
                 return completedStringified;
             }
 
             function idGenerate(emptyVar, dentistId, timeChosen) {
 
-                emptyVar.clientId = parseInt(Math.random() * (500000 - 1) + 1); // create client id inside client object
+                emptyVar.userId = parseInt(Math.random() * (500000 - 1) + 1); // create client id inside client object
                 emptyVar.requestId = dentistId + parseInt(Math.random() * ((dentistId * 153) / 2 - 1) + 1);; // create requestId variable inside client object
                 emptyVar.dentistID = dentistId; // create requestId variable inside client object
 
-                emptyVar.clientTime = timeChosen;
+                var modifyDateFormat = JSON.parse(timeChosen)
+                var splitUpString = timeChosen.split('/');
+                var year = splitUpString[0]
+                var month = splitUpString[1]
+                var day = splitUpString[2]
+                var hour = splitUpString[4]
+                var minute = splitUpString[5]
+                var yearWithoutQuotes = year.replace(/"/g, ''); // remove the quotes 
+                var minuteWithoutQuotes = minute.replace(/"/g, ''); // remove the quotes 
+
+
+                emptyVar.date = yearWithoutQuotes + "-" + month + "-" + day + " " + hour + ":" + minuteWithoutQuotes;
+
                 return emptyVar;
             }
 
@@ -299,38 +315,17 @@
                 return emptyVar;
             }
 
-            function timeGenerate(emptyVar) {
-
-                Date.now()
-                var newTime = new Date()
-
-                var currentHour = newTime.getHours();
-
-                var currentMinute = newTime.getMinutes();
-                var currentDayOfMonth = newTime.getDay();
-                var currentMonth = newTime.getMonth(); // Be careful! January is 0, not 1
-                var currentYear = newTime.getFullYear();
-
-                var dateString = currentHour + ":" + currentMinute + " " + currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
-                emptyVar.bookingTime = dateString; // we create a variable inside the client object
-
-                return emptyVar;
-            }
-
             var previousTopic2 = null
 
-            function addClientCoordinates(emptyVar) {
-                clientCoordinates = "[11.969388,57.707619]"; // this should be dynamically filled 
-                emptyVar.clientCoordinates = clientCoordinates;
-                return emptyVar
-            }
+
             var bookChoice = function(dentistId, time) {
                 //console.log(time)
                 var userData = this.clientData(dentistId, time)
+                console.log("Booking Request")
                 console.log(userData)
                 client.publish('ramzimkoqaz1984qwe2', userData)
 
-                var timeout = setTimeout("location.reload(true);", 4000);
+                // var timeout = setTimeout("location.reload(true);", 4000);
 
                 function resetTimeout() {
                     clearTimeout(timeout);
