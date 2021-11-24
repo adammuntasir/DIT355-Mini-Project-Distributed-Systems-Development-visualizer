@@ -105,7 +105,7 @@
             client.connect({
                 onSuccess: function() {
                     console.log('connected');
-                    client.subscribe('ramzimkoqaz1984qwe'); // get js object from data handler
+                    client.subscribe('ramzimkoqaz1984qwe1'); // get js object from data handler
 
                 }
             });
@@ -114,9 +114,18 @@
 
                     var topicArgument = retrieveTopic() // the date chosen by the user
 
-                    var allCoordinates = new Array(); // create empty array to insert coordinates 
+                    //var allCoordinates = new Array(); // create empty array to insert coordinates 
+                    //var redCoordinatesTaken = new Array(); // create empty array to insert coordinates 
+                    //redCoordinatesTaken.push(redArray)
+                    //redCoordinatesTaken.push(message.takenCoordinatesRed)
+                    //console.log(redCoordinatesTaken)
+                    //console.log(message.payloadString)
 
                     var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
+                        //console.log(wholeJSON[1].takenData.length)
+
+                    allCoordinates = (wholeJSON[1].takenData)
+                        //console.log(allCoordinates)
                         /*
                                             var countKey = Object.keys(wholeJSON.dentists).length; // how many elements in the array
                                             for (var m = 0; m < countKey; m++) {
@@ -126,8 +135,7 @@
                                             var withoutQuotes = allCoordinatesString.replace(/"/g, ''); // remove the quotes 
                                             var readyForMap = JSON.parse(withoutQuotes) // make the coordinates without quotes 
                         */
-
-                    wholeJSON.dentists.forEach(function(e) {
+                    wholeJSON[0].dentists.forEach(function(e) {
                         var marker = new mapboxgl.Marker()
                             .setLngLat(e.coordinate) // variable 
                             .setPopup(new mapboxgl.Popup()
@@ -135,14 +143,24 @@
                                     `<h5>${JSON.stringify(e.name)}</h5> 
                                     <h6>${JSON.stringify(e.address)}</h6> 
     <button  onclick= ${"bookChoice(e.id, topicReady)"}  >Book</button>`
-                                ))
+                                )).addTo(map)
 
-                        .addTo(map)
-                        var topicReady = JSON.stringify(topicArgument)
+                        allCoordinates.forEach(function(c) {
 
-                        marker.getElement().addEventListener('click', () => {
-                            bookChoice(e.id, topicReady);
+                            var marker2 = new mapboxgl.Marker({
+                                    "color": "#b40219"
+                                })
+                                .setLngLat(c)
+                                .addTo(map)
+                            var topicReady = JSON.stringify(topicArgument)
+
+                            marker.getElement().addEventListener('click', () => {
+                                bookChoice(e.id, topicReady, e.coordinate);
+                            })
+
                         })
+
+
 
                         /*
  onclick= ${"bookChoice(e.id, topicReady)"} 
@@ -157,6 +175,8 @@
                                                     bookChoice();})
                         */
                     });
+
+
                 } else if (message.payloadString[0] === "{") {
 
                     var objectify = JSON.parse(message.payloadString)
@@ -166,9 +186,7 @@
                         console.log("Booking Response")
                         console.log(messageTaken3)
 
-
                     }
-
                 }
             }
 
@@ -201,12 +219,12 @@
                 var topic = this.retrieveTopic()
                     //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
 
-                client.publish('ramzimkoqaz1984qwe2', topic)
+                client.publish('ramzimkoqaz1984qwe22', topic)
                     // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe2')
+                    client.unsubscribe('ramzimkoqaz1984qwe22')
                 }
-                previousTopic = 'ramzimkoqaz1984qwe2'
+                previousTopic = 'ramzimkoqaz1984qwe22'
             }
 
             // the topic will recieve should either contain the number, or # for all, or + and a number
@@ -280,22 +298,23 @@
                 return fullTopic
             }
 
-            function clientData(dentistId, timeChosen) {
+            function clientData(dentistId, timeChosen, coordinateChosen) {
                 var emptyObj = {
                     userId: "",
                     requestId: "",
                     dentistID: "",
                     issuance: "",
                     date: "",
+                    clientCoordinates: ""
                 };
                 //console.log(emptyObj);
-                var idFilled = this.idGenerate(emptyObj, dentistId, timeChosen);
+                var idFilled = this.idGenerate(emptyObj, dentistId, timeChosen, coordinateChosen);
                 var issuanceFilled = this.issuanceGenerate(idFilled)
                 var completedStringified = JSON.stringify(issuanceFilled);
                 return completedStringified;
             }
 
-            function idGenerate(emptyVar, dentistId, timeChosen) {
+            function idGenerate(emptyVar, dentistId, timeChosen, coordinateChosen) {
 
                 emptyVar.userId = parseInt(Math.random() * (500000 - 1) + 1); // create client id inside client object
                 emptyVar.requestId = dentistId + parseInt(Math.random() * ((dentistId * 153) / 2 - 1) + 1);; // create requestId variable inside client object
@@ -314,6 +333,7 @@
 
                 emptyVar.date = yearWithoutQuotes + "-" + month + "-" + day + " " + hour + ":" + minuteWithoutQuotes;
 
+                emptyVar.clientCoordinates = coordinateChosen
                 return emptyVar;
             }
 
@@ -326,12 +346,12 @@
             var previousTopic2 = null
 
 
-            var bookChoice = function(dentistId, time) {
+            var bookChoice = function(dentistId, time, coordinate) {
                 //console.log(time)
-                var userData = this.clientData(dentistId, time)
+                var userData = this.clientData(dentistId, time, coordinate)
                 console.log("Booking Request")
                 console.log(userData)
-                client.publish('ramzimkoqaz1984qwe2', userData)
+                client.publish('ramzimkoqaz1984qwe22', userData)
 
                 // var timeout = setTimeout("location.reload(true);", 4000);
 
@@ -341,7 +361,7 @@
                 }
                 // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic2 !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe2')
+                    client.unsubscribe('ramzimkoqaz1984qwe22')
                 }
 
             }
