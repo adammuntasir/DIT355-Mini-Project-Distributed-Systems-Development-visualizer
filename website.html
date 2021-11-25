@@ -125,16 +125,17 @@
                         //console.log(wholeJSON[1].takenData.length)
 
                     allCoordinates = (wholeJSON[1].takenData)
-                        //console.log(allCoordinates)
-                        /*
-                                            var countKey = Object.keys(wholeJSON.dentists).length; // how many elements in the array
-                                            for (var m = 0; m < countKey; m++) {
-                                                allCoordinates[m] = wholeJSON.dentists[m].coordinate // save all coordinates
-                                            }
-                                            var allCoordinatesString = JSON.stringify(allCoordinates)
-                                            var withoutQuotes = allCoordinatesString.replace(/"/g, ''); // remove the quotes 
-                                            var readyForMap = JSON.parse(withoutQuotes) // make the coordinates without quotes 
-                        */
+
+                    //console.log(allCoordinates)
+                    /*
+                                        var countKey = Object.keys(wholeJSON.dentists).length; // how many elements in the array
+                                        for (var m = 0; m < countKey; m++) {
+                                            allCoordinates[m] = wholeJSON.dentists[m].coordinate // save all coordinates
+                                        }
+                                        var allCoordinatesString = JSON.stringify(allCoordinates)
+                                        var withoutQuotes = allCoordinatesString.replace(/"/g, ''); // remove the quotes 
+                                        var readyForMap = JSON.parse(withoutQuotes) // make the coordinates without quotes 
+                    */
                     wholeJSON[0].dentists.forEach(function(e) {
                         var marker = new mapboxgl.Marker()
                             .setLngLat(e.coordinate) // variable 
@@ -159,6 +160,9 @@
                             })
 
                         })
+
+
+
 
 
 
@@ -354,11 +358,12 @@
                 client.publish('ramzimkoqaz1984qwe22', userData)
 
                 // var timeout = setTimeout("location.reload(true);", 4000);
-
-                function resetTimeout() {
-                    clearTimeout(timeout);
-                    timeout = setTimeout("location.reload(true);", 4000);
-                }
+                /*
+                                function resetTimeout() {
+                                    clearTimeout(timeout);
+                                    timeout = setTimeout("location.reload(true);", 4000);
+                                }
+                                */
                 // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic2 !== 'undefined') {
                     client.unsubscribe('ramzimkoqaz1984qwe22')
