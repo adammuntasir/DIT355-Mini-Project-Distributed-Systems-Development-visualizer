@@ -19,8 +19,6 @@
         /* The Modal (background) */
     </style>
 
-
-
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
 
@@ -111,31 +109,13 @@
             });
             client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
                 if (message.payloadString.length > 800) {
-
                     var topicArgument = retrieveTopic() // the date chosen by the user
-
-                    //var allCoordinates = new Array(); // create empty array to insert coordinates 
-                    //var redCoordinatesTaken = new Array(); // create empty array to insert coordinates 
-                    //redCoordinatesTaken.push(redArray)
-                    //redCoordinatesTaken.push(message.takenCoordinatesRed)
-                    //console.log(redCoordinatesTaken)
-                    //console.log(message.payloadString)
 
                     var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
                         //console.log(wholeJSON[1].takenData.length)
 
                     allCoordinates = (wholeJSON[1].takenData)
 
-                    //console.log(allCoordinates)
-                    /*
-                                        var countKey = Object.keys(wholeJSON.dentists).length; // how many elements in the array
-                                        for (var m = 0; m < countKey; m++) {
-                                            allCoordinates[m] = wholeJSON.dentists[m].coordinate // save all coordinates
-                                        }
-                                        var allCoordinatesString = JSON.stringify(allCoordinates)
-                                        var withoutQuotes = allCoordinatesString.replace(/"/g, ''); // remove the quotes 
-                                        var readyForMap = JSON.parse(withoutQuotes) // make the coordinates without quotes 
-                    */
                     wholeJSON[0].dentists.forEach(function(e) {
                         var marker = new mapboxgl.Marker()
                             .setLngLat(e.coordinate) // variable 
@@ -162,24 +142,11 @@
                         marker.getElement().addEventListener('click', () => {
                             bookChoice(e.id, topicReady, e.coordinate);
                         })
-
-
-                        /*
- onclick= ${"bookChoice(e.id, topicReady)"} 
-
-                        marker.getElement().addEventListener('click', () => {
-                            bookChoice(e.id, topicReady);
-                        })
-
-                                 document.getElementsByClassName("btn")[0].addEventListener('mouseover', () => {bookChoice();})
-
-                            marker.getElement().addEventListener('click', () => {
-                                                    bookChoice();})
-                        */
                     });
 
 
-                } else if (message.payloadString[0] === "{") {
+                } else if (message.payloadString[0] === "{" && message.payloadString.length < 50) {
+                    //console.log(message.payloadString)
 
                     var objectify = JSON.parse(message.payloadString)
                     var messageTaken3 = objectify
