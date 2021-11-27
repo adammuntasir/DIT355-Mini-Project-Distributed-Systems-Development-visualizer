@@ -146,24 +146,22 @@
     <button  onclick= ${"bookChoice(e.id, topicReady)"}  >Book</button>`
                                 )).addTo(map)
 
+
                         allCoordinates.forEach(function(c) {
 
                             var marker2 = new mapboxgl.Marker({
                                     "color": "#b40219"
                                 })
                                 .setLngLat(c)
+                                .setPopup(new mapboxgl.Popup())
                                 .addTo(map)
-                            var topicReady = JSON.stringify(topicArgument)
-
-                            marker.getElement().addEventListener('click', () => {
-                                bookChoice(e.id, topicReady, e.coordinate);
-                            })
-
                         })
 
+                        var topicReady = JSON.stringify(topicArgument)
 
-
-
+                        marker.getElement().addEventListener('click', () => {
+                            bookChoice(e.id, topicReady, e.coordinate);
+                        })
 
 
                         /*
@@ -184,12 +182,12 @@
                 } else if (message.payloadString[0] === "{") {
 
                     var objectify = JSON.parse(message.payloadString)
+                    var messageTaken3 = objectify
 
                     if (objectify.hasOwnProperty('time')) {
-                        var messageTaken3 = objectify
                         console.log("Booking Response")
                         console.log(messageTaken3)
-
+                            //show toast for a couple of seconds 
                     }
                 }
             }
@@ -339,6 +337,7 @@
 
                 emptyVar.clientCoordinates = coordinateChosen
                 return emptyVar;
+
             }
 
             function issuanceGenerate(emptyVar) {
