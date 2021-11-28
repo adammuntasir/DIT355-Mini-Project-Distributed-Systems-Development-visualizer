@@ -119,9 +119,21 @@
                             .setLngLat(e.coordinate) // variable 
                             .setPopup(new mapboxgl.Popup()
                                 .setHTML(
-                                    `<h5>${JSON.stringify(e.name)}</h5> 
-                                    <h6>${JSON.stringify(e.address)}</h6> 
-    <button  onclick= ${"bookChoice(e.id, topicReady)"}  >Book</button>`
+                                    `<h6>${JSON.stringify(e.name)}</h6> 
+                                    <br>
+                                    <h7> Owner Name: ${JSON.stringify(e.owner)}</h7>                                     
+                                    <br>
+                                    <h7> Number of Dentists:${JSON.stringify(e.dentists)}</h7>                                     
+                                    <br>
+                                    <h7> Address:${JSON.stringify(e.address)}</h7> 
+                                    <br>
+                                    <h7> Lunch Hours: 12:00 - 13:00 </h7> 
+                                    <br>
+                                    <h7> Fika Hours: 15:00 - 15:30 </h7>
+                                    <br>
+                                    '<button id="view-full">View Full'
+                                    `
+
                                 )).addTo(map)
 
 
@@ -137,9 +149,13 @@
 
                         var topicReady = JSON.stringify(topicArgument)
 
+                        document.getElementById('view-full').addEventListener('click', console.log("hi"))
+
                         marker.getElement().addEventListener('click', () => {
                             bookChoice(e.id, topicReady, e.coordinate);
                         })
+
+
                     });
 
 
@@ -193,6 +209,8 @@
                 }
                 previousTopic = 'ramzimkoqaz1984qwe22'
             }
+
+            function doNothing() {}
 
             // the topic will recieve should either contain the number, or # for all, or + and a number
             var retrieveTopic = function() {
