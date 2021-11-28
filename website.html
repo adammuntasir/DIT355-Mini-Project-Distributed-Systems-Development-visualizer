@@ -131,7 +131,6 @@
                                     <br>
                                     <h7> Fika Hours: 15:00 - 15:30 </h7>
                                     <br>
-                                    '<button id="view-full">View Full'
                                     `
 
                                 )).addTo(map)
@@ -149,7 +148,6 @@
 
                         var topicReady = JSON.stringify(topicArgument)
 
-                        document.getElementById('view-full').addEventListener('click', console.log("hi"))
 
                         marker.getElement().addEventListener('click', () => {
                             bookChoice(e.id, topicReady, e.coordinate);
