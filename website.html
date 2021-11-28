@@ -113,6 +113,7 @@
                         //console.log(wholeJSON[1].takenData.length)
 
                     allCoordinates = (wholeJSON[1].takenData)
+                    map.doubleClickZoom.disable();
 
                     wholeJSON[0].dentists.forEach(function(e) {
                         var marker = new mapboxgl.Marker()
@@ -132,7 +133,6 @@
                                     <h7> Fika Hours: 15:00 - 15:30 </h7>
                                     <br>
                                     `
-
                                 )).addTo(map)
 
 
@@ -148,10 +148,17 @@
 
                         var topicReady = JSON.stringify(topicArgument)
 
+                        /*
+                        var element = document.getElementsByClassName("view-full")
+                        element.addEventListener('click',
+                                bookChoice(e.id, topicReady, e.coordinate), false
+                            )
+                            */
 
-                        marker.getElement().addEventListener('click', () => {
+                        marker.getElement().addEventListener('dblclick', () => {
                             bookChoice(e.id, topicReady, e.coordinate);
                         })
+
 
 
                     });
