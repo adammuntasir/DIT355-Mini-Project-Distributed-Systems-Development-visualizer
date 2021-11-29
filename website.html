@@ -16,9 +16,8 @@
         #map {
             height: 500px
         }
+        /* The Modal (background) */
     </style>
-
-
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
@@ -49,30 +48,29 @@
         <div id='map'></div>
         <h1>Dentistimo</h1>
 
-        <button onclick="bookChoice()">Book</button>
+        <!--    <button onclick="bookChoice()">Book</button> -->
 
         <ul class="list-unstyled components">
             <!--<p class="para">year/month/week/wday/hour</p>-->
-            <label for="yearSelect">Select year:</label>
+            <label for="yearSelect">Select Year:</label>
             <select name="yearDropDown" id="yearSelect">
         <option value="#">All</option>
         <option value="2021">2021</option>
-        <option value="2020">2020</option>
-        <option value="2019">2019</option>
-        <option value="2018">2018</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
       </select>
 
-            <label for="monthSelect">Select month:</label>
+            <label for="monthSelect">Select Month:</label>
             <select class="1-12" name="monthDropDown" id="monthSelect">
         <option value="#">All</option>
       </select>
 
-            <label for="weekSelect">Select week:</label>
-            <select class="1-53" name="weekDropDown" id="weekSelect">
+            <label for="weekSelect">Select Day:</label>
+            <select class="1-31" name="weekDropDown" id="weekSelect">
         <option value="#">All</option>
       </select>
 
-            <label for="daySelect">Select day:</label>
+            <label for="daySelect">Select Week Day:</label>
             <select name="dayDropDown" id="daySelect">
         <option value="#">All</option>
         <option value="Monday">Monday</option>
@@ -80,19 +78,17 @@
         <option value="Wednesday">Wednesday</option>
         <option value="Thursday">Thursday</option>
         <option value="Friday">Friday</option>
-        <option value="Saturday">Saturday</option>
-        <option value="Sunday">Sunday</option>
       </select>
 
-            <label for="hourSelect">Select hour:</label>
+            <label for="hourSelect">Select Hour:</label>
             <select class="0-23" name="hourDropDown" id="hourSelect">
         <option value="#">All</option>
       </select>
-            <label for="minuteSelect">Select minutes:</label>
+            <label for="minuteSelect">Select Minutes:</label>
 
             <select name="minuteDropdown" id="minuteSelect">
         <option value="#">All</option>
-                <option value=0>00</option>
+                <option value=00>00</option>
         <option value=30>30</option>
 
       </select>
@@ -100,23 +96,87 @@
         Subscribe
       </button>
         </ul>
-
         <script>
             var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
             client.connect({
                 onSuccess: function() {
                     console.log('connected');
-                    client.subscribe('ramzimkoqaz1984qwe'); // get js object from data handler
+                    client.subscribe('ramzimkoqaz1984qwe1'); // get js object from data handler
 
                 }
             });
             client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
+                if (message.payloadString.length > 800) {
+                    var topicArgument = retrieveTopic() // the date chosen by the user
 
-                //var objectify = JSON.parse(message.payloadString) // to get the contents of the message use a function outside this 
-                console.log(message);
-            };
+                    var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
+                        //console.log(wholeJSON[1].takenData.length)
+
+                    allCoordinates = (wholeJSON[1].takenData)
+                    map.doubleClickZoom.disable();
+
+                    wholeJSON[0].dentists.forEach(function(e) {
+                        var marker = new mapboxgl.Marker()
+                            .setLngLat(e.coordinate) // variable 
+                            .setPopup(new mapboxgl.Popup()
+                                .setHTML(
+                                    `<h6>${JSON.stringify(e.name)}</h6> 
+                                    <br>
+                                    <h7> Owner Name: ${JSON.stringify(e.owner)}</h7>                                     
+                                    <br>
+                                    <h7> Number of Dentists:${JSON.stringify(e.dentists)}</h7>                                     
+                                    <br>
+                                    <h7> Address:${JSON.stringify(e.address)}</h7> 
+                                    <br>
+                                    <h7> Lunch Hours: 12:00 - 13:00 </h7> 
+                                    <br>
+                                    <h7> Fika Hours: 15:00 - 15:30 </h7>
+                                    <br>
+                                    `
+                                )).addTo(map)
 
 
+                        allCoordinates.forEach(function(c) {
+
+                            var marker2 = new mapboxgl.Marker({
+                                    "color": "#b40219"
+                                })
+                                .setLngLat(c)
+                                .setPopup(new mapboxgl.Popup())
+                                .addTo(map)
+                        })
+
+                        var topicReady = JSON.stringify(topicArgument)
+
+                        /*
+                        var element = document.getElementsByClassName("view-full")
+                        element.addEventListener('click',
+                                bookChoice(e.id, topicReady, e.coordinate), false
+                            )
+                            */
+
+                        marker.getElement().addEventListener('dblclick', () => {
+                            bookChoice(e.id, topicReady, e.coordinate);
+                        })
+
+
+
+                    });
+
+
+                } else if (message.payloadString[0] === "{" && message.payloadString.length < 50) {
+                    //console.log(message.payloadString)
+
+                    var objectify = JSON.parse(message.payloadString)
+                    var messageTaken3 = objectify
+
+                    if (objectify.hasOwnProperty('time')) {
+                        console.log("Booking Response")
+                        console.log(messageTaken3)
+                            //show toast for a couple of seconds 
+                    }
+                }
+            }
 
 
             $(function() {
@@ -127,8 +187,8 @@
             })
 
             $(function() {
-                var $select = $('.1-53')
-                for (i = 1; i <= 53; i++) {
+                var $select = $('.1-31')
+                for (i = 1; i <= 31; i++) {
                     $select.append($('<option></option>').val(i).html(i))
                 }
             })
@@ -140,18 +200,22 @@
                 }
             })
 
+            var previousTopic = null
+
             function subscribeToTopic() {
                 //GET SELECTED TOPIC
                 var topic = this.retrieveTopic()
-                client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
+                    //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
 
-                console.log(topic)
+                client.publish('ramzimkoqaz1984qwe22', topic)
                     // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe(previousTopic)
+                    client.unsubscribe('ramzimkoqaz1984qwe22')
                 }
-                previousTopic = topic
+                previousTopic = 'ramzimkoqaz1984qwe22'
             }
+
+            function doNothing() {}
 
             // the topic will recieve should either contain the number, or # for all, or + and a number
             var retrieveTopic = function() {
@@ -224,32 +288,44 @@
                 return fullTopic
             }
 
-            function clientData(request) {
+            function clientData(dentistId, timeChosen, coordinateChosen) {
                 var emptyObj = {
-                    deviceId: "",
+                    userId: "",
                     requestId: "",
-                    bookingTime: "",
-                    issuance: "",
                     dentistID: "",
-                    clientTime: "",
+                    issuance: "",
+                    date: "",
                     clientCoordinates: ""
                 };
                 //console.log(emptyObj);
-                var idFilled = this.idGenerate(emptyObj, request);
-                var timeFilled = this.timeGenerate(idFilled);
-                var issuanceFilled = this.issuanceGenerate(timeFilled)
-                var dentistIDFilled = this.addDentistId(issuanceFilled); // THIS IS DEMO ONLY we are supposed to take this from the marker (the marker should have coordinates and dentist id and times and address)
-                var preferredTimeByClient = this.addClientTime(dentistIDFilled); // THIS IS DEMO ONLY we are supposed to take this from the dataHandler when we have a map with coordinates and click book we are supposed to know the time that the client have chosen
-                var dentistCoordinates = this.addClientCoordinates(preferredTimeByClient);
-                var completedStringified = JSON.stringify(dentistCoordinates);
+                var idFilled = this.idGenerate(emptyObj, dentistId, timeChosen, coordinateChosen);
+                var issuanceFilled = this.issuanceGenerate(idFilled)
+                var completedStringified = JSON.stringify(issuanceFilled);
                 return completedStringified;
             }
 
-            function idGenerate(emptyVar, requesting) {
+            function idGenerate(emptyVar, dentistId, timeChosen, coordinateChosen) {
 
-                emptyVar.deviceId = parseInt(Math.random() * (500000 - 1) + 1); // create device id inside client object
-                emptyVar.requestId = requesting; // create requestId variable inside client object
+                emptyVar.userId = parseInt(Math.random() * (500000 - 1) + 1); // create client id inside client object
+                emptyVar.requestId = dentistId + parseInt(Math.random() * ((dentistId * 153) / 2 - 1) + 1);; // create requestId variable inside client object
+                emptyVar.dentistID = dentistId; // create requestId variable inside client object
+
+                var modifyDateFormat = JSON.parse(timeChosen)
+                var splitUpString = timeChosen.split('/');
+                var year = splitUpString[0]
+                var month = splitUpString[1]
+                var day = splitUpString[2]
+                var hour = splitUpString[4]
+                var minute = splitUpString[5]
+                var yearWithoutQuotes = year.replace(/"/g, ''); // remove the quotes 
+                var minuteWithoutQuotes = minute.replace(/"/g, ''); // remove the quotes 
+
+
+                emptyVar.date = yearWithoutQuotes + "-" + month + "-" + day + " " + hour + ":" + minuteWithoutQuotes;
+
+                emptyVar.clientCoordinates = coordinateChosen
                 return emptyVar;
+
             }
 
             function issuanceGenerate(emptyVar) {
@@ -258,52 +334,28 @@
                 return emptyVar;
             }
 
-            function timeGenerate(emptyVar) {
+            var previousTopic2 = null
 
-                Date.now()
-                var newTime = new Date()
 
-                var currentHour = newTime.getHours();
-
-                var currentMinute = newTime.getMinutes();
-                var currentDayOfMonth = newTime.getDay();
-                var currentMonth = newTime.getMonth(); // Be careful! January is 0, not 1
-                var currentYear = newTime.getFullYear();
-
-                var dateString = currentHour + ":" + currentMinute + " " + currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
-                emptyVar.bookingTime = dateString; // we create a variable inside the client object
-
-                return emptyVar;
-            }
-
-            function addDentistId(emptyVar) {
-                idExtracted = "1"; // this should be dynamically filled 
-                emptyVar.dentistID = idExtracted;
-                return emptyVar
-            }
-
-            function addClientTime(emptyVar) {
-                clientTime = "2019/5/6/Wednesday/10/30"; // this should be dynamically filled 
-                emptyVar.clientTime = clientTime;
-                return emptyVar
-            }
-
-            function addClientCoordinates(emptyVar) {
-                clientCoordinates = "[11.969388,57.707619]"; // this should be dynamically filled 
-                emptyVar.clientCoordinates = clientCoordinates;
-                return emptyVar
-            }
-            var bookChoice = function() {
-
-                var userData = this.clientData()
+            var bookChoice = function(dentistId, time, coordinate) {
+                //console.log(time)
+                var userData = this.clientData(dentistId, time, coordinate)
+                console.log("Booking Request")
                 console.log(userData)
-                client.publish('ramzimkoqaz1984qwe2', userData)
+                client.publish('ramzimkoqaz1984qwe22', userData)
 
+                // var timeout = setTimeout("location.reload(true);", 4000);
+                /*
+                                function resetTimeout() {
+                                    clearTimeout(timeout);
+                                    timeout = setTimeout("location.reload(true);", 4000);
+                                }
+                                */
                 // we do not end the subscription until the topic is a valid type
-                if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe(previousTopic)
-
+                if (typeof previousTopic2 !== 'undefined') {
+                    client.unsubscribe('ramzimkoqaz1984qwe22')
                 }
+
             }
 
 
@@ -317,45 +369,9 @@
                 center: [11.942625, 57.685259], //starting position [lng, lat]
                 zoom: 10, // starting zoom
             })
-
-            var popup = new mapboxgl.Popup()
-                .setHTML('<h6>Reykjavik Roasters</h6><p>A good coffee shop</p><button>Book</button>');
-
-            var marker = new mapboxgl.Marker()
-                .setLngLat([11.974560, 57.708870]) // variable 
-                .setPopup(popup)
-                .addTo(map);
         </script>
+
+
 </body>
 
 </html>
-
-<!-- 
-1. Create a geojson object variable.
-
-
-    var geojson = {
-    "name":"NewFeatureType",
-    "type":"FeatureCollection",
-    "features":[{
-        "type":"Feature",
-        "geometry":{
-            "type":"LineString",
-            "coordinates":[]
-        },
-        "properties":null
-    }]
-};
-
-2. then you do pushing into coordinates array
-
-geojson.features[0].geometry.coordinates.push([lat, lng]);
-
-
-"features":[{ is an array and in the first index of that array there is an object. Therefore, it must be referenced like so, geojson.features[0].geometry. If its written like this: "features":{ without the [ then it should be referenced like this: geojson.features.geometry
-
-    https://stackoverflow.com/questions/30579655/generating-geojson-with-javascript
-
-
-
--->
