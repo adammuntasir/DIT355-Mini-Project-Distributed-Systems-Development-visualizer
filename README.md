@@ -25,6 +25,6 @@ https://git.chalmers.se:courses/dit355/test-teams-formation/team-8/Visualizer.gi
 ### Running
 To run this node we use "npm run dev" command
 
-###i# Link to the main Team-8 documentation ReadMe file
+#### Link to the main Team-8 documentation ReadMe file
 https://git.chalmers.se/courses/dit355/test-teams-formation/team-8/formatChecker/-/edit/main/README.md
 
