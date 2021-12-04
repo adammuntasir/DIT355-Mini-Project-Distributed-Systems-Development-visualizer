@@ -163,6 +163,7 @@
       </button>
         </ul>
         <script>
+            var turnOffButtons = 0
             var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
             client.connect({
                 onSuccess: function() {
@@ -220,11 +221,11 @@
                                 bookChoice(e.id, topicReady, e.coordinate), false
                             )
                             */
-
-                        marker.getElement().addEventListener('dblclick', () => {
-                            bookChoice(e.id, topicReady, e.coordinate);
-                        })
-
+                        if (turnOffButtons != 1) {
+                            marker.getElement().addEventListener('dblclick', () => {
+                                bookChoice(e.id, topicReady, e.coordinate);
+                            })
+                        }
 
 
                     });
@@ -235,7 +236,6 @@
 
                     var objectify = JSON.parse(message.payloadString)
                     var messageTaken3 = objectify
-
                     if (objectify.hasOwnProperty('time')) {
                         console.log("Booking Response")
                         console.log(messageTaken3)
@@ -250,6 +250,27 @@
                             x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
                         }, 3000);
 
+                    } else if (objectify.hasOwnProperty('c')) {
+                        console.log("Circtuit Breaker Opened")
+                        document.getElementById("myText").innerHTML = "Circuit Breaker Open";
+                        var x = document.getElementById("snackbar"); // get the snackbar div
+                        x.className = "show"; // add show class (in styles you will see what it is)
+                        setTimeout(function() {
+                            x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
+                        }, 10000);
+
+                        turnOffButtons = 1
+                            //sleepFor(1000)
+
+                        function sleepFor(sleepDuration) {
+                            var now = new Date().getTime();
+                            while (new Date().getTime() < now + sleepDuration) { /* Do nothing */ }
+                        }
+
+                        setInterval(function() {
+                            turnOffButtons = 0
+
+                        }, 10000)
                     }
                 }
             }
@@ -283,13 +304,14 @@
                 //GET SELECTED TOPIC
                 var topic = this.retrieveTopic()
                     //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
-
-                client.publish('ramzimkoqaz1984qwe22', topic)
-                    // we do not end the subscription until the topic is a valid type
-                if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe22')
+                if (turnOffButtons != 1) {
+                    client.publish('ramzimkoqaz1984qwe22', topic)
+                        // we do not end the subscription until the topic is a valid type
+                    if (typeof previousTopic !== 'undefined') {
+                        client.unsubscribe('ramzimkoqaz1984qwe22')
+                    }
+                    previousTopic = 'ramzimkoqaz1984qwe22'
                 }
-                previousTopic = 'ramzimkoqaz1984qwe22'
             }
 
             function doNothing() {}
