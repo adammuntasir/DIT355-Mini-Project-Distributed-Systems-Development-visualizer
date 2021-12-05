@@ -257,10 +257,10 @@
                         x.className = "show"; // add show class (in styles you will see what it is)
                         setTimeout(function() {
                             x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
-                        }, 10000);
+                        }, 3000);
 
                         turnOffButtons = 1
-                            //sleepFor(1000)
+                        sleepFor(2000)
 
                         function sleepFor(sleepDuration) {
                             var now = new Date().getTime();
