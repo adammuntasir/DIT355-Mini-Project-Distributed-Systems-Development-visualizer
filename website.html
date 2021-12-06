@@ -167,7 +167,7 @@
             client.connect({
                 onSuccess: function() {
                     console.log('connected');
-                    client.subscribe('ramzimkoqaz1984qwe1'); // get js object from data handler
+                    client.subscribe('ramzimkoqaz1984qwe11'); // get js object from data handler
 
                 }
             });
@@ -250,32 +250,22 @@
                         turnOffButtons = 1
 
                     } else if (objectify.hasOwnProperty('c')) {
+                        console.log("Circtuit Breaker Opened")
+                        document.getElementById("myText").innerHTML = "Circuit Breaker Open";
+                        var x = document.getElementById("snackbar"); // get the snackbar div
+                        x.className = "show"; // add show class (in styles you will see what it is)
                         setTimeout(function() {
-
-                            console.log("Circuit Breaker Opened") // show in the consoel
-
-                            // make the toast say Circuit Breaker Open
-                            document.getElementById("myText").innerHTML = "Circuit Breaker Open";
-                            var x = document.getElementById("snackbar"); // get the snackbar div
-                            x.className = "show"; // add show class (in styles you will see what it is)
                             x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
-
-                            // make the entire website to stop working so that the subscriber does not receive and buttons dont work
-
-                            /*
-                            var blurDiv = document.createElement("div");
-                            blurDiv.id = "blurDiv";
-                            blurDiv.style.cssText = "position:absolute; top:0; right:0; width:" + screen.width + "px; height:" + screen.height + "px; background-color: #000000; opacity:0.5; filter:alpha(opacity=50)";
-                            document.getElementsByTagName("body")[0].appendChild(blurDiv);
-                            */
                         }, 3000);
                     }
-                    /*
-                    var blurDiv = document.getElementById("blurDiv");
-                    blurDiv.parentNode.removeChild(blurDiv);
-                    */
                 }
             }
+
+
+
+
+
+
 
 
 
@@ -306,12 +296,12 @@
                 //GET SELECTED TOPIC
                 var topic = this.retrieveTopic()
                     //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
-                client.publish('ramzimkoqaz1984qwe22', topic)
+                client.publish('ramzimkoqaz1984qwe222', topic)
                     // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe22')
+                    client.unsubscribe('ramzimkoqaz1984qwe222')
                 }
-                previousTopic = 'ramzimkoqaz1984qwe22'
+                previousTopic = 'ramzimkoqaz1984qwe222'
             }
 
 
@@ -442,7 +432,7 @@
                 var userData = this.clientData(dentistId, time, coordinate)
                 console.log("Booking Request")
                 console.log(userData)
-                client.publish('ramzimkoqaz1984qwe22', userData)
+                client.publish('ramzimkoqaz1984qwe222', userData)
 
                 // var timeout = setTimeout("location.reload(true);", 4000);
                 /*
@@ -453,7 +443,7 @@
                                 */
                 // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic2 !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe22')
+                    client.unsubscribe('ramzimkoqaz1984qwe222')
                 }
 
             }
