@@ -117,47 +117,22 @@
         <!--    <button onclick="bookChoice()">Book</button> -->
 
         <ul class="list-unstyled components">
-            <!--<p class="para">year/month/week/wday/hour</p>-->
-            <label for="yearSelect">Select Year:</label>
-            <select name="yearDropDown" id="yearSelect">
-        <option value="#">All</option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-      </select>
-
-            <label for="monthSelect">Select Month:</label>
-            <select class="1-12" name="monthDropDown" id="monthSelect">
-        <option value="#">All</option>
-      </select>
-
-            <label for="weekSelect">Select Day:</label>
-            <select class="1-31" name="weekDropDown" id="weekSelect">
-        <option value="#">All</option>
-      </select>
-
-            <label for="daySelect">Select Week Day:</label>
-            <select name="dayDropDown" id="daySelect">
-        <option value="#">All</option>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-      </select>
+            <label for="appointmentDate">Appointment date:</label>
+            <input type="date" id="date" name="date">
 
             <label for="hourSelect">Select Hour:</label>
             <select class="0-23" name="hourDropDown" id="hourSelect">
-        <option value="#">All</option>
-      </select>
+                <option value="#">All</option>
+            </select>
             <label for="minuteSelect">Select Minutes:</label>
 
             <select name="minuteDropdown" id="minuteSelect">
-        <option value="#">All</option>
+                <option value="#">All</option>
                 <option value=00>00</option>
-        <option value=30>30</option>
+                <option value=30>30</option>
 
-      </select>
+            </select>
+
             <div><button type="button" id="toDisable" class="btn btn-secondary" onclick="subscribeToTopic();">
         Subscribe
       </button></div>
@@ -322,77 +297,31 @@
                 previousTopic = 'ramzimkoqaz1984qwe22'
             }
 
-
-            function doNothing() {}
+            function formatDate(date) {
+                var newDate = '';
+                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                var unFixed = new Date(date);
+                var fullYear = unFixed.getFullYear();
+                var month = unFixed.getMonth() + 1;
+                var weekDay = days[unFixed.getDay()]
+                var day = unFixed.getDate();
+                date = newDate.concat(
+                    fullYear + '/' + (month <= 9 ? '0' + month : month) + '/' + (day <= 9 ? '0' + day : day) + '/' + weekDay
+                )
+                return date;
+            }
 
             // the topic will recieve should either contain the number, or # for all, or + and a number
             var retrieveTopic = function() {
                 var newTopic = ''
                 var fullTopic = ''
-                var year = document.getElementById('yearSelect').value
-                var month = document.getElementById('monthSelect').value
-                var week = document.getElementById('weekSelect').value
-                var day = document.getElementById('daySelect').value
+                var date = document.getElementById('date').value
+                date = this.formatDate(date);
                 var hour = document.getElementById('hourSelect').value
                 var minutes = document.getElementById('minuteSelect').value
-                if (
-                    year == '#' &&
-                    month == '#' &&
-                    week == '#' &&
-                    day == '#' &&
-                    hour == '#' &&
-                    minutes == '#'
-
-                ) {
-                    fullTopic = '#'
-                } else if (month == '#' && week == '#' && day == '#' && hour == '#' && minute == '#') {
-                    fullTopic = year + '/' + '#'
-                } else if (week == '#' && day == '#' && hour == '#' && minute == '#') {
-                    if (year == '#') {
-                        year = '+'
-                    }
-                    fullTopic = newTopic.concat(year + '/' + month + '/' + '#')
-                } else if (day == '#' && hour == '#') {
-                    if (year == '#') {
-                        year = '+'
-                    }
-                    if (month == '#') {
-                        month = '+'
-                    }
-                    fullTopic = newTopic.concat(
-                        year + '/' + month + '/' + week + '/' + '#'
-                    )
-                } else if (hour == '#') {
-                    if (year == '#') {
-                        year = '+'
-                    }
-                    if (month == '#') {
-                        month = '+'
-                    }
-                    if (week == '#') {
-                        week = '+'
-                    }
-                    fullTopic = newTopic.concat(
-                        year + '/' + month + '/' + week + '/' + day + '/' + '#'
-                    )
-                } else {
-                    if (year == '#') {
-                        year = '+'
-                    }
-                    if (month == '#') {
-                        month = '+'
-                    }
-                    if (week == '#') {
-                        week = '+'
-                    }
-                    if (day == '#') {
-                        day = '+'
-                    }
-                    fullTopic = newTopic.concat(
-                        year + '/' + month + '/' + week + '/' + day + '/' + hour + '/' + minutes
-                    )
-                }
-
+                fullTopic = newTopic.concat(
+                    date + '/' + hour + '/' + minutes
+                )
                 return fullTopic
             }
 
