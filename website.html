@@ -158,16 +158,16 @@
         <option value=30>30</option>
 
       </select>
-            <button type="button" class="btn btn-secondary" onclick="subscribeToTopic();">
+            <div><button type="button" id="toDisable" class="btn btn-secondary" onclick="subscribeToTopic();">
         Subscribe
-      </button>
+      </button></div>
         </ul>
         <script>
             var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
             client.connect({
                 onSuccess: function() {
                     console.log('connected');
-                    client.subscribe('ramzimkoqaz1984qwe11'); // get js object from data handler
+                    client.subscribe('ramzimkoqaz1984qwe1'); // get js object from data handler
 
                 }
             });
@@ -220,6 +220,8 @@
                                 bookChoice(e.id, topicReady, e.coordinate), false
                             )
                             */
+
+
                         marker.getElement().addEventListener('dblclick', () => {
                             bookChoice(e.id, topicReady, e.coordinate);
                         })
@@ -250,14 +252,31 @@
                         turnOffButtons = 1
 
                     } else if (objectify.hasOwnProperty('c')) {
-                        console.log("Circtuit Breaker Opened")
+                        console.log("Circuit Breaker Opened")
                         document.getElementById("myText").innerHTML = "Circuit Breaker Open";
                         var x = document.getElementById("snackbar"); // get the snackbar div
                         x.className = "show"; // add show class (in styles you will see what it is)
                         setTimeout(function() {
+                            document.getElementById("toDisable").disabled = true;
+
+                            var blurDiv = document.createElement("div");
+                            blurDiv.id = "blurDiv";
+                            blurDiv.style.cssText = "position:absolute; top:0; right:0; width:" + screen.width + "px; height:" + screen.height + "px; background-color: #000000; opacity:0.5; filter:alpha(opacity=50)";
+
+                            document.getElementsByTagName("body")[0].appendChild(blurDiv);
+                            setTimeout(function() {
+                                document.getElementById("toDisable").disabled = false;
+
+                                var blurDiv = document.getElementById("blurDiv");
+                                blurDiv.parentNode.removeChild(blurDiv);
+                            }, 3000); // wait seconds before making the button work again
+                        }, 0); // immediate disable to the button
+
+                        setTimeout(function() {
                             x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
                         }, 3000);
                     }
+
                 }
             }
 
@@ -296,12 +315,12 @@
                 //GET SELECTED TOPIC
                 var topic = this.retrieveTopic()
                     //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
-                client.publish('ramzimkoqaz1984qwe222', topic)
+                client.publish('ramzimkoqaz1984qwe22', topic)
                     // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe222')
+                    client.unsubscribe('ramzimkoqaz1984qwe22')
                 }
-                previousTopic = 'ramzimkoqaz1984qwe222'
+                previousTopic = 'ramzimkoqaz1984qwe22'
             }
 
 
@@ -432,7 +451,7 @@
                 var userData = this.clientData(dentistId, time, coordinate)
                 console.log("Booking Request")
                 console.log(userData)
-                client.publish('ramzimkoqaz1984qwe222', userData)
+                client.publish('ramzimkoqaz1984qwe22', userData)
 
                 // var timeout = setTimeout("location.reload(true);", 4000);
                 /*
@@ -443,7 +462,7 @@
                                 */
                 // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic2 !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe222')
+                    client.unsubscribe('ramzimkoqaz1984qwe22')
                 }
 
             }
