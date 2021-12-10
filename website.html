@@ -3,15 +3,15 @@
 <html>
 
 <head>
-    <h1 id= header >Dentistimo </h1>
-    <div><img id=imag src="\assets\dental.jpg " style="float:left;padding-right:20px" width="900" height="400" />
+    <h1 id= header > Dentistimo </h1>
+    <div><img id=imag src="\assets\dental.jpg " style="float:left;padding-right:20px" width="850" height="330" />
      <div id= instructions>
         <p id= first > <u> How to use this application:</u></p>
-       <p>-Select date to search for clinic information.</p>
-       <p>-Blue clinics are available.</p>
-       <p>-Red clinic are unavailable.</p>
-       <p>-Please click on the blue marker once to view.</p>
-       <p>-Please click on the blue marker twice to book.</p></div>
+       <p>-Select date to search for clinic information</p>
+       <p>-Blue markers show available clinics</p>
+       <p>-Red markers show unavailable clinics</p>
+       <p>-Click once on blue marker to view dentist details</p>
+       <p>-Click twice on blue marker to book</p></div>
     </div>
 <br style="clear:both" />
     <meta charset=utf-8 />
@@ -19,7 +19,7 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     
 
-    <body style="background-color:rgb(73, 171, 236);"></body>
+    <body style="background-color:rgb(113, 220, 235);"></body>
 
 <ul class="list-unstyled components">
     <label for="appointmentDate">Appointment date:</label>
@@ -43,38 +43,41 @@
         </button></div>
 </ul>
     <style>
+         #header{
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 50px;
+            font-family: Italic;
+             }
+        
         #imag{
            margin-left: 1%;
            margin-top: 2%;
            margin-right: 2%;
         }
-        
         #instructions {
             font-weight: bold;
-            font-family: Cursive;
-            font-size: 30px;
-            margin-top: 3%;
+            font-family: Italic;
+            font-size: 25px;
+            margin-top: 1%;
         } 
         #first {
             font-weight: bold;
-            font-family: Cursive;
+            font-family: Italic;
             font-size: 35px;
             margin-left: 20%;
         
         }
-
-        #header{
-            text-align: center
-            }
        #toDisable{
        background-color: #056e91;
        color: #fff; 
-    }
+       }
+
        .list-unstyled{
-        margin-top: 5%;
+        margin-top: 1%;
         text-align: center;
          font-weight: bold
-
     }
          
         #snackbar {
