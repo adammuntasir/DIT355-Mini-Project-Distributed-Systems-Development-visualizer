@@ -3,11 +3,48 @@
 <html>
 
 <head>
+    <h1 id= header >Dentistimo </h1>
     <meta charset=utf-8 />
     <title>Load GeoJSON</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<body style="background-color:rgb(73, 171, 236);"></body>
 
+<ul class="list-unstyled components">
+    <label for="appointmentDate">Appointment date:</label>
+    <input type="date" id="date" name="date">
+
+    <label for="hourSelect">Select Hour:</label>
+    <select class="0-23" name="hourDropDown" id="hourSelect">
+        <option value="#">All</option>
+    </select>
+    <label for="minuteSelect">Select Minutes:</label>
+
+    <select name="minuteDropdown" id="minuteSelect">
+        <option value="#">All</option>
+        <option value=00>00</option>
+        <option value=30>30</option>
+
+    </select>
+
+    <div><button type="button" id="toDisable"   onclick="subscribeToTopic();">
+            Serach For Clinic
+        </button></div>
+</ul>
     <style>
+        #header{
+            text-align: center
+            }
+       #toDisable{
+       background-color: #056e91;
+       color: #fff; 
+    }
+       .list-unstyled{
+        margin-top: 20%;
+        text-align: center;
+         font-weight: bold
+
+    }
+         
         #snackbar {
             visibility: hidden;
             min-width: 250px;
@@ -112,32 +149,8 @@
 
     <div id="content" class="container-fluid fill-height">
         <div id='map'></div>
-        <h1>Dentistimo</h1>
 
-        <!--    <button onclick="bookChoice()">Book</button> -->
-
-        <ul class="list-unstyled components">
-            <label for="appointmentDate">Appointment date:</label>
-            <input type="date" id="date" name="date">
-
-            <label for="hourSelect">Select Hour:</label>
-            <select class="0-23" name="hourDropDown" id="hourSelect">
-                <option value="#">All</option>
-            </select>
-            <label for="minuteSelect">Select Minutes:</label>
-
-            <select name="minuteDropdown" id="minuteSelect">
-                <option value="#">All</option>
-                <option value=00>00</option>
-                <option value=30>30</option>
-
-            </select>
-
-            <div><button type="button" id="toDisable" class="btn btn-secondary" onclick="subscribeToTopic();">
-        Subscribe
-      </button></div>
-        </ul>
-        <script>
+      <script>
             var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
             client.connect({
                 onSuccess: function() {
