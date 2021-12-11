@@ -3,88 +3,125 @@
 <html>
 
 <head>
-    <h1 id= header > Dentistimo </h1>
-    <div><img id=imag src="\assets\dental.jpg " style="float:left;padding-right:20px" width="850" height="330" />
-     <div id= instructions>
-        <p id= first > <u> How to use this application:</u></p>
-       <p>-Select date to search for clinic information</p>
-       <p>-Blue markers show available clinics</p>
-       <p>-Red markers show unavailable clinics</p>
-       <p>-Click once on blue marker to view dentist details</p>
-       <p>-Click twice on blue marker to book</p></div>
+    <div><img class="img-container container-fluid fill-height" src="assets\dental.png "
+            style="align-content: center;" />
+        <!-- <h1 id=header> Dentistimo </h1>  
+        <div><img id=imag src="\assets\dental.jpg " style="float:left;padding-right:20px" width="850" height="330" />
+            -->
+
+
+        <br style="clear:both" />
+        <meta charset=utf-8 />
+        <title>Load GeoJSON</title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+
+<body style="background-color:rgb(222, 231, 235);"></body>
+
+
+
+
+<div id="content" class="container-fluid fill-height">
+
+    <div class="row">
+        <div class="col">
+            <br>
+            <div id='map'></div>
+        </div>
+
+        <div class="col col-lg-3">
+            <br>
+
+            <div class="fas list-unstyled" style="color: rgb(87, 85, 85);font-size: small;">
+                <p> <b> <u> Instructions:</u> </b></p>
+                <p>-Select date and time</p>
+                <p>-Blue markers show available clinics</p>
+                <p>-Red markers show unavailable clinics</p>
+                <p>-Click once on blue marker to view clinic details</p>
+                <p>-Click twice on blue marker to book</p>
+            </div>
+            <br>
+            <br>
+
+            <br>
+            <br>
+            <br>
+
+            <ul class="list-unstyled " style="color: rgb(30, 85, 122);">
+                <label for="appointmentDate">Appointment Date:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="date" id="date" name="date">
+                <br>
+                <label for="hourSelect">Select
+                    Hour:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <select class="0-23" name="hourDropDown" id="hourSelect">
+                    <option value="#">None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                </select>
+                <br>
+                <label for="minuteSelect">Select
+                    Minutes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <select name="minuteDropdown" id="minuteSelect">
+                    <option value="#">None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                    <option value=00>00</option>
+                    <option value=30>30</option>
+                </select>
+                <br>
+                <br>
+                <button type="button" id="toDisable" onclick="subscribeToTopic();">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Search</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+            </ul>
+        </div>
     </div>
-<br style="clear:both" />
-    <meta charset=utf-8 />
-    <title>Load GeoJSON</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    
 
-    <body style="background-color:rgb(113, 220, 235);"></body>
-
-<ul class="list-unstyled components">
-    <label for="appointmentDate">Appointment date:</label>
-    <input type="date" id="date" name="date">
-
-    <label for="hourSelect">Select Hour:</label>
-    <select class="0-23" name="hourDropDown" id="hourSelect">
-        <option value="#">All</option>
-    </select>
-    <label for="minuteSelect">Select Minutes:</label>
-
-    <select name="minuteDropdown" id="minuteSelect">
-        <option value="#">All</option>
-        <option value=00>00</option>
-        <option value=30>30</option>
-
-    </select>
-
-    <div><button type="button" id="toDisable"   onclick="subscribeToTopic();">
-            Serach For Clinic
-        </button></div>
-</ul>
     <style>
-         #header{
+        #header {
             text-align: center;
             margin-top: 10px;
             font-weight: bold;
             font-size: 50px;
             font-family: Italic;
-             }
-        
-        #imag{
-           margin-left: 1%;
-           margin-top: 2%;
-           margin-right: 2%;
         }
+
+        .img-container {
+            text-align: center;
+        }
+
+        #imag {
+            margin-left: 2%;
+            margin-top: 2%;
+            margin-right: 2%;
+        }
+
         #instructions {
             font-weight: bold;
             font-family: Italic;
             font-size: 25px;
             margin-top: 1%;
-        } 
+        }
+
         #first {
             font-weight: bold;
             font-family: Italic;
             font-size: 35px;
             margin-left: 20%;
-        
         }
-       #toDisable{
-       background-color: #056e91;
-       color: #fff; 
-       }
 
-       .list-unstyled{
-        margin-top: 1%;
-        text-align: center;
-         font-weight: bold
-    }
-         
+        #toDisable {
+            background-color: #056e91;
+            color: #fff;
+        }
+
+        .list-unstyled {
+            margin-top: 1%;
+            text-align: left;
+            font-weight: bold
+        }
+
         #snackbar {
             visibility: hidden;
             min-width: 250px;
             margin-left: -125px;
-            background-color: #333;
+            background-color: rgb(230, 63, 63);
             color: #fff;
             text-align: center;
             border-radius: 2px;
@@ -92,118 +129,130 @@
             position: fixed;
             z-index: 1;
             left: 50%;
-            bottom: 30px;
+            bottom: 100px;
             font-size: 17px;
         }
-        
+
         #snackbar.show {
             visibility: visible;
             -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
             animation: fadein 0.5s, fadeout 0.5s 2.5s;
         }
-        
+
         @-webkit-keyframes fadein {
             from {
                 bottom: 0;
                 opacity: 0;
             }
+
             to {
-                bottom: 30px;
+                bottom: 100px;
                 opacity: 1;
             }
         }
-        
+
         @keyframes fadein {
             from {
                 bottom: 0;
                 opacity: 0;
             }
+
             to {
-                bottom: 30px;
+                bottom: 100px;
                 opacity: 1;
             }
         }
-        
+
         @-webkit-keyframes fadeout {
             from {
-                bottom: 30px;
+                bottom: 100px;
                 opacity: 1;
             }
+
             to {
                 bottom: 0;
                 opacity: 0;
             }
         }
-        
+
         @keyframes fadeout {
             from {
-                bottom: 30px;
+                bottom: 100px;
                 opacity: 1;
             }
+
             to {
                 bottom: 0;
                 opacity: 0;
             }
         }
-        
+
         body {
             margin: 0;
             padding: 0;
         }
-        
+
         #map {
-            height: 500px
+            height: 600px
         }
+
         /* The Modal (background) */
     </style>
 
     <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+
+    <!-- Bootstrap Font -->
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
+        integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
 
     <!--jQuery library to populate the options using a function-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 
     <!-- jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+        </script>
 
     <!-- MAPBOX -->
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
 
-</head>
 
-<body>
-    <script src='paho-mqtt.js'>
-    </script>
+    </head>
 
-    <script>
-    </script>
-    <ul id='message-list'></ul>
+    <body>
+        <script src='paho-mqtt.js'>
+        </script>
 
-    <div id="content" class="container-fluid fill-height">
-        <div id='map'></div>
+        <script>
+        </script>
+        <ul id='message-list'></ul>
 
-      <script>
+
+        <script>
             var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
             client.connect({
-                onSuccess: function() {
+                onSuccess: function () {
                     console.log('connected');
                     client.subscribe('ramzimkoqaz1984qwe1'); // get js object from data handler
                 }
             });
-            client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
+            client.onMessageArrived = function (message) { // only takes messages from Paho, from data handler
                 if (message.payloadString.length > 800) {
                     var topicArgument = retrieveTopic() // the date chosen by the user
 
                     var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
-                        //console.log(wholeJSON[1].takenData.length)
+                    //console.log(wholeJSON[1].takenData.length)
 
                     allCoordinates = (wholeJSON[1].takenData)
                     map.doubleClickZoom.disable();
 
-                    wholeJSON[0].dentists.forEach(function(e) {
+                    wholeJSON[0].dentists.forEach(function (e) {
                         var marker = new mapboxgl.Marker()
                             .setLngLat(e.coordinate) // variable 
                             .setPopup(new mapboxgl.Popup()
@@ -224,11 +273,11 @@
                                 )).addTo(map)
 
 
-                        allCoordinates.forEach(function(c) {
+                        allCoordinates.forEach(function (c) {
 
                             var marker2 = new mapboxgl.Marker({
-                                    "color": "#b40219"
-                                })
+                                "color": "#b40219"
+                            })
                                 .setLngLat(c)
                                 .setPopup(new mapboxgl.Popup())
                                 .addTo(map)
@@ -261,14 +310,14 @@
                     if (objectify.hasOwnProperty('time')) {
                         console.log("Booking Response")
                         console.log(messageTaken3)
-                            //show toast for a couple of seconds 
+                        //show toast for a couple of seconds 
 
                         forToast = JSON.stringify(messageTaken3) // make the info string
                         document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
 
                         var x = document.getElementById("snackbar"); // get the snackbar div
                         x.className = "show"; // add show class (in styles you will see what it is)
-                        setTimeout(function() {
+                        setTimeout(function () {
                             x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
                         }, 3000);
                         turnOffButtons = 1
@@ -278,7 +327,7 @@
                         document.getElementById("myText").innerHTML = "Circuit Breaker Open";
                         var x = document.getElementById("snackbar"); // get the snackbar div
                         x.className = "show"; // add show class (in styles you will see what it is)
-                        setTimeout(function() {
+                        setTimeout(function () {
                             document.getElementById("toDisable").disabled = true;
 
                             var blurDiv = document.createElement("div");
@@ -286,7 +335,7 @@
                             blurDiv.style.cssText = "position:absolute; top:0; right:0; width:" + screen.width + "px; height:" + screen.height + "px; background-color: #000000; opacity:0.5; filter:alpha(opacity=50)";
 
                             document.getElementsByTagName("body")[0].appendChild(blurDiv);
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 document.getElementById("toDisable").disabled = false;
 
                                 var blurDiv = document.getElementById("blurDiv");
@@ -294,7 +343,7 @@
                             }, 3000); // wait seconds before making the button work again
                         }, 0); // immediate disable to the button
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
                         }, 3000);
                     }
@@ -310,21 +359,21 @@
 
 
 
-            $(function() {
+            $(function () {
                 var $select = $('.1-12')
                 for (i = 1; i <= 12; i++) {
                     $select.append($('<option></option>').val(i).html(i))
                 }
             })
 
-            $(function() {
+            $(function () {
                 var $select = $('.1-31')
                 for (i = 1; i <= 31; i++) {
                     $select.append($('<option></option>').val(i).html(i))
                 }
             })
 
-            $(function() {
+            $(function () {
                 var $select = $('.0-23')
                 for (i = 0; i <= 23; i++) {
                     $select.append($('<option></option>').val(i).html(i))
@@ -336,9 +385,9 @@
             function subscribeToTopic() {
                 //GET SELECTED TOPIC
                 var topic = this.retrieveTopic()
-                    //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
+                //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
                 client.publish('ramzimkoqaz1984qwe22', topic)
-                    // we do not end the subscription until the topic is a valid type
+                // we do not end the subscription until the topic is a valid type
                 if (typeof previousTopic !== 'undefined') {
                     client.unsubscribe('ramzimkoqaz1984qwe22')
                 }
@@ -360,7 +409,7 @@
             }
 
             // the topic will recieve should either contain the number, or # for all, or + and a number
-            var retrieveTopic = function() {
+            var retrieveTopic = function () {
                 var newTopic = ''
                 var fullTopic = ''
                 var date = document.getElementById('date').value
@@ -422,7 +471,7 @@
             var previousTopic2 = null
 
 
-            var bookChoice = function(dentistId, time, coordinate) {
+            var bookChoice = function (dentistId, time, coordinate) {
                 //console.log(time)
                 var userData = this.clientData(dentistId, time, coordinate)
                 console.log("Booking Request")
@@ -450,7 +499,7 @@
             // javascript to instantiate the map
             const map = new mapboxgl.Map({
                 container: 'map', // appear in the container with the id called map
-                style: 'mapbox://styles/mapbox/streets-v9', // style URL
+                style: 'mapbox://styles/mapbox/streets-v11', // style URL
                 center: [11.942625, 57.685259], //starting position [lng, lat]
                 zoom: 10, // starting zoom
             })
@@ -459,6 +508,6 @@
         <div id="snackbar"><span id="myText"></span></div>
 
 
-</body>
+    </body>
 
 </html>
