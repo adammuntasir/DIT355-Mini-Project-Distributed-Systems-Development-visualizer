@@ -24,6 +24,7 @@
 
             <div class="row">
                 <div class="col">
+                    <br>
                     <div id='map'></div>
                 </div>
 
@@ -117,7 +118,7 @@
                     visibility: hidden;
                     min-width: 250px;
                     margin-left: -125px;
-                    background-color: #333;
+                    background-color: rgb(230, 63, 63);
                     color: #fff;
                     text-align: center;
                     border-radius: 2px;
@@ -125,7 +126,7 @@
                     position: fixed;
                     z-index: 1;
                     left: 50%;
-                    bottom: 30px;
+                    bottom: 100px;
                     font-size: 17px;
                 }
                 
@@ -141,7 +142,7 @@
                         opacity: 0;
                     }
                     to {
-                        bottom: 30px;
+                        bottom: 100px;
                         opacity: 1;
                     }
                 }
@@ -152,14 +153,14 @@
                         opacity: 0;
                     }
                     to {
-                        bottom: 30px;
+                        bottom: 100px;
                         opacity: 1;
                     }
                 }
                 
                 @-webkit-keyframes fadeout {
                     from {
-                        bottom: 30px;
+                        bottom: 100px;
                         opacity: 1;
                     }
                     to {
@@ -170,7 +171,7 @@
                 
                 @keyframes fadeout {
                     from {
-                        bottom: 30px;
+                        bottom: 100px;
                         opacity: 1;
                     }
                     to {
@@ -230,66 +231,8 @@
             }
         });
         client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
-            if (message.payloadString.length > 800) {
-                var topicArgument = retrieveTopic() // the date chosen by the user
 
-                var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
-                    //console.log(wholeJSON[1].takenData.length)
-
-                allCoordinates = (wholeJSON[1].takenData)
-                map.doubleClickZoom.disable();
-
-                wholeJSON[0].dentists.forEach(function(e) {
-                    var marker = new mapboxgl.Marker()
-                        .setLngLat(e.coordinate) // variable 
-                        .setPopup(new mapboxgl.Popup()
-                            .setHTML(
-                                `<h6>${JSON.stringify(e.name)}</h6> 
-                                    <br>
-                                    <h7> Owner Name: ${JSON.stringify(e.owner)}</h7>                                     
-                                    <br>
-                                    <h7> Number of Dentists:${JSON.stringify(e.dentists)}</h7>                                     
-                                    <br>
-                                    <h7> Address:${JSON.stringify(e.address)}</h7> 
-                                    <br>
-                                    <h7> Lunch Hours: 12:00 - 13:00 </h7> 
-                                    <br>
-                                    <h7> Fika Hours: 15:00 - 15:30 </h7>
-                                    <br>
-                                    `
-                            )).addTo(map)
-
-
-                    allCoordinates.forEach(function(c) {
-
-                        var marker2 = new mapboxgl.Marker({
-                                "color": "#b40219"
-                            })
-                            .setLngLat(c)
-                            .setPopup(new mapboxgl.Popup())
-                            .addTo(map)
-                    })
-
-                    var topicReady = JSON.stringify(topicArgument)
-
-                    /*
-                    var element = document.getElementsByClassName("view-full")
-                    element.addEventListener('click',
-                            bookChoice(e.id, topicReady, e.coordinate), false
-                        )
-                        */
-
-
-                    marker.getElement().addEventListener('dblclick', () => {
-                        bookChoice(e.id, topicReady, e.coordinate);
-                    })
-
-
-
-                });
-
-
-            } else if (message.payloadString[0] === "{" && message.payloadString.length < 50) {
+            if (message.payloadString[0] === "{" && message.payloadString.length < 50) {
                 //console.log(message.payloadString)
 
                 var objectify = JSON.parse(message.payloadString)
@@ -308,8 +251,12 @@
                         x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
                     }, 3000);
                     turnOffButtons = 1
+                    if (Object.values(objectify) == "Not Open") {
+                        console.log("hide markers")
+                    }
 
-                } else if (objectify.hasOwnProperty('c')) {
+                }
+                if (objectify.hasOwnProperty('c')) {
                     console.log("Circuit Breaker Opened")
                     document.getElementById("myText").innerHTML = "Circuit Breaker Open";
                     var x = document.getElementById("snackbar"); // get the snackbar div
@@ -336,29 +283,58 @@
                 }
 
             }
+
+
+            if (message.payloadString.length > 800) {
+                var topicArgument = retrieveTopic() // the date chosen by the user
+
+                var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
+                    //console.log(wholeJSON[1].takenData.length)
+                allCoordinates = (wholeJSON[1].takenData)
+                map.doubleClickZoom.disable();
+
+                wholeJSON[0].dentists.forEach(function(e) {
+                    var marker = new mapboxgl.Marker()
+                        .setLngLat(e.coordinate) // variable 
+                        .setPopup(new mapboxgl.Popup()
+                            .setHTML(
+                                `<h6>${JSON.stringify(e.name)}</h6> 
+                                    <br>
+                                    <h7> Owner Name: ${JSON.stringify(e.owner)}</h7>                                     
+                                    <br>
+                                    <h7> Number of Dentists:${JSON.stringify(e.dentists)}</h7>                                     
+                                    <br>
+                                    <h7> Address:${JSON.stringify(e.address)}</h7> 
+                                    <br>
+                                    <h7> Lunch Hours: 12:00 - 13:00 </h7> 
+                                    <br>
+                                    <h7> Fika Hours: 15:00 - 15:30 </h7>
+                                    <br>
+                                    `
+                            )).addTo(map)
+
+
+
+                    allCoordinates.forEach(function(c) {
+
+                        var marker2 = new mapboxgl.Marker({
+                                "color": "#b40219"
+                            })
+                            .setLngLat(c)
+                            .setPopup(new mapboxgl.Popup())
+                            .addTo(map)
+                    })
+
+                    var topicReady = JSON.stringify(topicArgument)
+
+                    marker.getElement().addEventListener('dblclick', () => {
+                        bookChoice(e.id, topicReady, e.coordinate);
+                    })
+                })
+            }
+
+
         }
-
-
-
-
-
-
-
-
-
-        $(function() {
-            var $select = $('.1-12')
-            for (i = 1; i <= 12; i++) {
-                $select.append($('<option></option>').val(i).html(i))
-            }
-        })
-
-        $(function() {
-            var $select = $('.1-31')
-            for (i = 1; i <= 31; i++) {
-                $select.append($('<option></option>').val(i).html(i))
-            }
-        })
 
         $(function() {
             var $select = $('.0-23')
@@ -441,7 +417,6 @@
             var yearWithoutQuotes = year.replace(/"/g, ''); // remove the quotes 
             var minuteWithoutQuotes = minute.replace(/"/g, ''); // remove the quotes 
 
-
             emptyVar.date = yearWithoutQuotes + "-" + month + "-" + day + " " + hour + ":" + minuteWithoutQuotes;
 
             emptyVar.clientCoordinates = coordinateChosen
@@ -464,19 +439,9 @@
             console.log("Booking Request")
             console.log(userData)
             client.publish('ramzimkoqaz1984qwe22', userData)
-
-            // var timeout = setTimeout("location.reload(true);", 4000);
-            /*
-                            function resetTimeout() {
-                                clearTimeout(timeout);
-                                timeout = setTimeout("location.reload(true);", 4000);
-                            }
-                            */
-            // we do not end the subscription until the topic is a valid type
             if (typeof previousTopic2 !== 'undefined') {
                 client.unsubscribe('ramzimkoqaz1984qwe22')
             }
-
         }
 
 
@@ -486,7 +451,7 @@
         // javascript to instantiate the map
         const map = new mapboxgl.Map({
             container: 'map', // appear in the container with the id called map
-            style: 'mapbox://styles/mapbox/light-v10', // style URL
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
             center: [11.942625, 57.685259], //starting position [lng, lat]
             zoom: 10, // starting zoom
         })
