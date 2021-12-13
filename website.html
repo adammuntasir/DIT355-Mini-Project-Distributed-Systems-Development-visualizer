@@ -3,109 +3,213 @@
 <html>
 
 <head>
-    <meta charset=utf-8 />
-    <title>Load GeoJSON</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-
-    <style>
-        #snackbar {
-            visibility: hidden;
-            min-width: 250px;
-            margin-left: -125px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 2px;
-            padding: 16px;
-            position: fixed;
-            z-index: 1;
-            left: 50%;
-            bottom: 30px;
-            font-size: 17px;
-        }
-
-        #snackbar.show {
-            visibility: visible;
-            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
-
-        @-webkit-keyframes fadein {
-            from {
-                bottom: 0;
-                opacity: 0;
-            }
-
-            to {
-                bottom: 30px;
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadein {
-            from {
-                bottom: 0;
-                opacity: 0;
-            }
-
-            to {
-                bottom: 30px;
-                opacity: 1;
-            }
-        }
-
-        @-webkit-keyframes fadeout {
-            from {
-                bottom: 30px;
-                opacity: 1;
-            }
-
-            to {
-                bottom: 0;
-                opacity: 0;
-            }
-        }
-
-        @keyframes fadeout {
-            from {
-                bottom: 30px;
-                opacity: 1;
-            }
-
-            to {
-                bottom: 0;
-                opacity: 0;
-            }
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        #map {
-            height: 500px
-        }
-
-        /* The Modal (background) */
-    </style>
-
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
-
-    <!--jQuery library to populate the options using a function-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <div><img class="img-container container-fluid fill-height" src="assets\Logo with Word Enhanced Font Large.png " style="align-content: center;" />
+        <!-- <h1 id=header> Dentistimo </h1>  
+        <div><img id=imag src="\assets\dental.jpg " style="float:left;padding-right:20px" width="850" height="330" />
+            -->
 
 
-    <!-- jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-        </script>
+        <br style="clear:both" />
+        <meta charset=utf-8 />
+        <title>Load GeoJSON</title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-    <!-- MAPBOX -->
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
+
+        <body style="background-color:rgb(222, 231, 235);"></body>
+
+
+
+
+        <div id="content" class="container-fluid fill-height">
+
+            <div class="row">
+                <div class="col">
+                    <br>
+                    <div id='map'></div>
+                </div>
+
+                <div class="col col-lg-3">
+                    <br>
+
+                    <div class="fas list-unstyled" style="color: rgb(87, 85, 85);font-size: small;">
+                        <p> <b> <u> Instructions:</u> </b></p>
+                        <p>-Select date and time</p>
+                        <p>-Blue markers show available clinics</p>
+                        <p>-Red markers show unavailable clinics</p>
+                        <p>-Click once on blue marker to view clinic details</p>
+                        <p>-Click twice on blue marker to book</p>
+                    </div>
+                    <br>
+                    <br>
+
+                    <br>
+                    <br>
+                    <br>
+
+                    <ul class="list-unstyled " style="color: rgb(30, 85, 122);">
+                        <label for="appointmentDate">Appointment Date:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="date" id="date" name="date">
+                        <br>
+                        <label for="hourSelect">Select Hour:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <select class="0-23" name="hourDropDown" id="hourSelect">
+                        <option value="#">None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                         </select>
+                        <br>
+                        <label for="minuteSelect">Select Minutes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <select name="minuteDropdown" id="minuteSelect">
+                        <option value="#">None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                        <option value=00>00</option>
+                        <option value=30>30</option>
+                         </select>
+                        <br>
+                        <br>
+                        <button type="button" id="toDisable" onclick="subscribeToTopic();">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Search</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>
+                    </ul>
+                </div>
+            </div>
+
+            <style>
+                #header {
+                    text-align: center;
+                    margin-top: 10px;
+                    font-weight: bold;
+                    font-size: 50px;
+                    font-family: Italic;
+                }
+                
+                .img-container {
+                    text-align: center;
+                }
+                
+                #imag {
+                    margin-left: 2%;
+                    margin-top: 2%;
+                    margin-right: 2%;
+                }
+                
+                #instructions {
+                    font-weight: bold;
+                    font-family: Italic;
+                    font-size: 25px;
+                    margin-top: 1%;
+                }
+                
+                #first {
+                    font-weight: bold;
+                    font-family: Italic;
+                    font-size: 35px;
+                    margin-left: 20%;
+                }
+                
+                #toDisable {
+                    background-color: #056e91;
+                    color: #fff;
+                }
+                
+                .list-unstyled {
+                    margin-top: 1%;
+                    text-align: left;
+                    font-weight: bold
+                }
+                
+                #snackbar {
+                    visibility: hidden;
+                    min-width: 250px;
+                    margin-left: -125px;
+                    background-color: rgb(230, 63, 63);
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 2px;
+                    padding: 16px;
+                    position: fixed;
+                    z-index: 1;
+                    left: 50%;
+                    bottom: 100px;
+                    font-size: 17px;
+                }
+                
+                #snackbar.show {
+                    visibility: visible;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                }
+                
+                @-webkit-keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 100px;
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 100px;
+                        opacity: 1;
+                    }
+                }
+                
+                @-webkit-keyframes fadeout {
+                    from {
+                        bottom: 100px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes fadeout {
+                    from {
+                        bottom: 100px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                #map {
+                    height: 600px
+                }
+                /* The Modal (background) */
+            </style>
+
+            <!-- Bootstrap CSS CDN -->
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+
+            <!-- Bootstrap Font -->
+
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+
+            <!--jQuery library to populate the options using a function-->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+            <!-- jQuery CDN -->
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+            </script>
+
+            <!-- MAPBOX -->
+            <script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
+            <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
+
 
 </head>
 
@@ -117,58 +221,84 @@
     </script>
     <ul id='message-list'></ul>
 
-    <div id="content" class="container-fluid fill-height">
-        <div id='map'></div>
-        <h1>Dentistimo</h1>
 
-        <!--    <button onclick="bookChoice()">Book</button> -->
+    <script>
+        var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
+        client.connect({
+            onSuccess: function() {
+                console.log('connected');
+                client.subscribe('ramzimkoqaz1984qwe1'); // get js object from data handler
+            }
+        });
+        client.onMessageArrived = function(message) { // only takes messages from Paho, from data handler
 
-        <ul class="list-unstyled components">
-            <label for="appointmentDate">Appointment date:</label>
-            <input type="date" id="date" name="date">
+            if (message.payloadString[0] === "{" && message.payloadString.length < 50) {
+                //console.log(message.payloadString)
 
-            <label for="hourSelect">Select Hour:</label>
-            <select class="0-23" name="hourDropDown" id="hourSelect">
-                <option value="#">All</option>
-            </select>
-            <label for="minuteSelect">Select Minutes:</label>
+                var objectify = JSON.parse(message.payloadString)
+                var messageTaken3 = objectify
+                if (objectify.hasOwnProperty('time')) {
+                    console.log("Booking Response")
+                    console.log(messageTaken3)
+                        //show toast for a couple of seconds 
 
-            <select name="minuteDropdown" id="minuteSelect">
-                <option value="#">All</option>
-                <option value=00>00</option>
-                <option value=30>30</option>
+                    forToast = JSON.stringify(messageTaken3) // make the info string
+                    document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
 
-            </select>
-            <button type="button" class="btn btn-secondary" onclick="subscribeToTopic();">
-                Search
-            </button>
-        </ul>
-        <script>
-            var turnOffButtons = 0
-            var client = new Paho.Client('broker.hivemq.com', 8000, 'razraz');
-            client.connect({
-                onSuccess: function () {
-                    console.log('connected');
-                    client.subscribe('ramzimkoqaz1984qwe1'); // get js object from data handler
+                    var x = document.getElementById("snackbar"); // get the snackbar div
+                    x.className = "show"; // add show class (in styles you will see what it is)
+                    setTimeout(function() {
+                        x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
+                    }, 3000);
+                    turnOffButtons = 1
+                    if (Object.values(objectify) == "Not Open") {
+                        console.log("hide markers")
+                    }
 
                 }
-            });
-            client.onMessageArrived = function (message) { // only takes messages from Paho, from data handler
-                if (message.payloadString.length > 800) {
-                    var topicArgument = retrieveTopic() // the date chosen by the user
+                if (objectify.hasOwnProperty('c')) {
+                    console.log("Circuit Breaker Opened")
+                    document.getElementById("myText").innerHTML = "Circuit Breaker Open";
+                    var x = document.getElementById("snackbar"); // get the snackbar div
+                    x.className = "show"; // add show class (in styles you will see what it is)
+                    setTimeout(function() {
+                        document.getElementById("toDisable").disabled = true;
 
-                    var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
+                        var blurDiv = document.createElement("div");
+                        blurDiv.id = "blurDiv";
+                        blurDiv.style.cssText = "position:absolute; top:0; right:0; width:" + screen.width + "px; height:" + screen.height + "px; background-color: #000000; opacity:0.5; filter:alpha(opacity=50)";
+
+                        document.getElementsByTagName("body")[0].appendChild(blurDiv);
+                        setTimeout(function() {
+                            document.getElementById("toDisable").disabled = false;
+
+                            var blurDiv = document.getElementById("blurDiv");
+                            blurDiv.parentNode.removeChild(blurDiv);
+                        }, 3000); // wait seconds before making the button work again
+                    }, 0); // immediate disable to the button
+
+                    setTimeout(function() {
+                        x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
+                    }, 3000);
+                }
+
+            }
+
+
+            if (message.payloadString.length > 800) {
+                var topicArgument = retrieveTopic() // the date chosen by the user
+
+                var wholeJSON = JSON.parse(message.payloadString) // get entire json from Data Handler
                     //console.log(wholeJSON[1].takenData.length)
+                allCoordinates = (wholeJSON[1].takenData)
+                map.doubleClickZoom.disable();
 
-                    allCoordinates = (wholeJSON[1].takenData)
-                    map.doubleClickZoom.disable();
-
-                    wholeJSON[0].dentists.forEach(function (e) {
-                        var marker = new mapboxgl.Marker()
-                            .setLngLat(e.coordinate) // variable 
-                            .setPopup(new mapboxgl.Popup()
-                                .setHTML(
-                                    `<h6>${JSON.stringify(e.name)}</h6> 
+                wholeJSON[0].dentists.forEach(function(e) {
+                    var marker = new mapboxgl.Marker()
+                        .setLngLat(e.coordinate) // variable 
+                        .setPopup(new mapboxgl.Popup()
+                            .setHTML(
+                                `<h6>${JSON.stringify(e.name)}</h6> 
                                     <br>
                                     <h7> Owner Name: ${JSON.stringify(e.owner)}</h7>                                     
                                     <br>
@@ -181,232 +311,153 @@
                                     <h7> Fika Hours: 15:00 - 15:30 </h7>
                                     <br>
                                     `
-                                )).addTo(map)
+                            )).addTo(map)
 
 
-                        allCoordinates.forEach(function (c) {
 
-                            var marker2 = new mapboxgl.Marker({
+                    allCoordinates.forEach(function(c) {
+
+                        var marker2 = new mapboxgl.Marker({
                                 "color": "#b40219"
                             })
-                                .setLngLat(c)
-                                .setPopup(new mapboxgl.Popup())
-                                .addTo(map)
-                        })
+                            .setLngLat(c)
+                            .setPopup(new mapboxgl.Popup())
+                            .addTo(map)
+                    })
 
-                        var topicReady = JSON.stringify(topicArgument)
+                    var topicReady = JSON.stringify(topicArgument)
 
-                        /*
-                        var element = document.getElementsByClassName("view-full")
-                        element.addEventListener('click',
-                                bookChoice(e.id, topicReady, e.coordinate), false
-                            )
-                            */
-                        if (turnOffButtons != 1) {
-                            marker.getElement().addEventListener('dblclick', () => {
-                                bookChoice(e.id, topicReady, e.coordinate);
-                            })
-                        }
-
-
-                    });
-
-
-                } else if (message.payloadString[0] === "{" && message.payloadString.length < 50) {
-                    //console.log(message.payloadString)
-
-                    var objectify = JSON.parse(message.payloadString)
-                    var messageTaken3 = objectify
-                    if (objectify.hasOwnProperty('time')) {
-                        console.log("Booking Response")
-                        console.log(messageTaken3)
-                        //show toast for a couple of seconds 
-
-                        forToast = JSON.stringify(messageTaken3) // make the info string
-                        document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
-
-                        var x = document.getElementById("snackbar"); // get the snackbar div
-                        x.className = "show"; // add show class (in styles you will see what it is)
-                        setTimeout(function () {
-                            x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
-                        }, 3000);
-
-                    } else if (objectify.hasOwnProperty('c')) {
-                        console.log("Circtuit Breaker Opened")
-                        document.getElementById("myText").innerHTML = "Circuit Breaker Open";
-                        var x = document.getElementById("snackbar"); // get the snackbar div
-                        x.className = "show"; // add show class (in styles you will see what it is)
-                        setTimeout(function () {
-                            x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
-                        }, 3000);
-
-                        turnOffButtons = 1
-                        sleepFor(2000)
-
-                        function sleepFor(sleepDuration) {
-                            var now = new Date().getTime();
-                            while (new Date().getTime() < now + sleepDuration) { /* Do nothing */ }
-                        }
-
-                        setInterval(function () {
-                            turnOffButtons = 0
-
-                        }, 10000)
-                    }
-                }
+                    marker.getElement().addEventListener('dblclick', () => {
+                        bookChoice(e.id, topicReady, e.coordinate);
+                    })
+                })
             }
 
 
+        }
 
-            $(function () {
-                var $select = $('.1-12')
-                for (i = 1; i <= 12; i++) {
-                    $select.append($('<option></option>').val(i).html(i))
-                }
-            })
+        $(function() {
+            var $select = $('.0-23')
+            for (i = 0; i <= 23; i++) {
+                $select.append($('<option></option>').val(i).html(i))
+            }
+        })
 
-            $(function () {
-                var $select = $('.1-31')
-                for (i = 1; i <= 31; i++) {
-                    $select.append($('<option></option>').val(i).html(i))
-                }
-            })
+        var previousTopic = null
 
-            $(function () {
-                var $select = $('.0-23')
-                for (i = 0; i <= 23; i++) {
-                    $select.append($('<option></option>').val(i).html(i))
-                }
-            })
-
-            var previousTopic = null
-
-            function subscribeToTopic() {
-                //GET SELECTED TOPIC
-                var topic = this.retrieveTopic()
+        function subscribeToTopic() {
+            //GET SELECTED TOPIC
+            var topic = this.retrieveTopic()
                 //  client.publish('ramzimkoqaz1984qwe2', retrieveTopic())
-                if (turnOffButtons != 1) {
-                    client.publish('ramzimkoqaz1984qwe22', topic)
-                    // we do not end the subscription until the topic is a valid type
-                    if (typeof previousTopic !== 'undefined') {
-                        client.unsubscribe('ramzimkoqaz1984qwe22')
-                    }
-                    previousTopic = 'ramzimkoqaz1984qwe22'
-                }
-            }
-
-            function formatDate(date) {
-                var newDate = '';
-                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                var unFixed = new Date(date);
-                var fullYear = unFixed.getFullYear();
-                var month = unFixed.getMonth() + 1;
-                var weekDay = days[unFixed.getDay()]
-                var day = unFixed.getDate();
-                date = newDate.concat(
-                    fullYear + '/' + (month <= 9 ? '0' + month : month) + '/' + weekDay + '/' + (day <= 9 ? '0' + day : day)
-                )
-                return date;
-            }
-
-            // the topic will recieve should either contain the number, or # for all, or + and a number
-            var retrieveTopic = function () {
-                var newTopic = ''
-                var fullTopic = ''
-                var date = document.getElementById('date').value
-                date = this.formatDate(date);
-                var hour = document.getElementById('hourSelect').value
-                var minutes = document.getElementById('minuteSelect').value
-                fullTopic = newTopic.concat(
-                    date + '/' + hour + '/' + minutes
-                )
-                return fullTopic
-            }
-
-            function clientData(dentistId, timeChosen, coordinateChosen) {
-                var emptyObj = {
-                    userId: "",
-                    requestId: "",
-                    dentistID: "",
-                    issuance: "",
-                    date: "",
-                    clientCoordinates: ""
-                };
-                //console.log(emptyObj);
-                var idFilled = this.idGenerate(emptyObj, dentistId, timeChosen, coordinateChosen);
-                var issuanceFilled = this.issuanceGenerate(idFilled)
-                var completedStringified = JSON.stringify(issuanceFilled);
-                return completedStringified;
-            }
-
-            function idGenerate(emptyVar, dentistId, timeChosen, coordinateChosen) {
-
-                emptyVar.userId = parseInt(Math.random() * (500000 - 1) + 1); // create client id inside client object
-                emptyVar.requestId = dentistId + parseInt(Math.random() * ((dentistId * 153) / 2 - 1) + 1);; // create requestId variable inside client object
-                emptyVar.dentistID = dentistId; // create requestId variable inside client object
-
-                var modifyDateFormat = JSON.parse(timeChosen)
-                var splitUpString = timeChosen.split('/');
-                var year = splitUpString[0]
-                var month = splitUpString[1]
-                var day = splitUpString[2]
-                var hour = splitUpString[4]
-                var minute = splitUpString[5]
-                var yearWithoutQuotes = year.replace(/"/g, ''); // remove the quotes 
-                var minuteWithoutQuotes = minute.replace(/"/g, ''); // remove the quotes 
-
-
-                emptyVar.date = yearWithoutQuotes + "-" + month + "-" + day + " " + hour + ":" + minuteWithoutQuotes;
-
-                emptyVar.clientCoordinates = coordinateChosen
-                return emptyVar;
-
-            }
-
-            function issuanceGenerate(emptyVar) {
-                var currentTime = Date.now();
-                emptyVar.issuance = currentTime; // create issuance variable for client object
-                return emptyVar;
-            }
-
-            var previousTopic2 = null
-
-
-            var bookChoice = function (dentistId, time, coordinate) {
-                //console.log(time)
-                var userData = this.clientData(dentistId, time, coordinate)
-                console.log("Booking Request")
-                console.log(userData)
-                client.publish('ramzimkoqaz1984qwe22', userData)
-
-                // var timeout = setTimeout("location.reload(true);", 4000);
-                /*
-                                function resetTimeout() {
-                                    clearTimeout(timeout);
-                                    timeout = setTimeout("location.reload(true);", 4000);
-                                }
-                                */
+            client.publish('ramzimkoqaz1984qwe22', topic)
                 // we do not end the subscription until the topic is a valid type
-                if (typeof previousTopic2 !== 'undefined') {
-                    client.unsubscribe('ramzimkoqaz1984qwe22')
-                }
-
+            if (typeof previousTopic !== 'undefined') {
+                client.unsubscribe('ramzimkoqaz1984qwe22')
             }
+            previousTopic = 'ramzimkoqaz1984qwe22'
+        }
+
+        function formatDate(date) {
+            var newDate = '';
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var unFixed = new Date(date);
+            var fullYear = unFixed.getFullYear();
+            var month = unFixed.getMonth() + 1;
+            var weekDay = days[unFixed.getDay()]
+            var day = unFixed.getDate();
+            date = newDate.concat(
+                fullYear + '/' + (month <= 9 ? '0' + month : month) + '/' + (day <= 9 ? '0' + day : day) + '/' + weekDay
+            )
+            return date;
+        }
+
+        // the topic will recieve should either contain the number, or # for all, or + and a number
+        var retrieveTopic = function() {
+            var newTopic = ''
+            var fullTopic = ''
+            var date = document.getElementById('date').value
+            date = this.formatDate(date);
+            var hour = document.getElementById('hourSelect').value
+            var minutes = document.getElementById('minuteSelect').value
+            fullTopic = newTopic.concat(
+                date + '/' + hour + '/' + minutes
+            )
+            return fullTopic
+        }
+
+        function clientData(dentistId, timeChosen, coordinateChosen) {
+            var emptyObj = {
+                userId: "",
+                requestId: "",
+                dentistID: "",
+                issuance: "",
+                date: "",
+                clientCoordinates: ""
+            };
+            //console.log(emptyObj);
+            var idFilled = this.idGenerate(emptyObj, dentistId, timeChosen, coordinateChosen);
+            var issuanceFilled = this.issuanceGenerate(idFilled)
+            var completedStringified = JSON.stringify(issuanceFilled);
+            return completedStringified;
+        }
+
+        function idGenerate(emptyVar, dentistId, timeChosen, coordinateChosen) {
+
+            emptyVar.userId = parseInt(Math.random() * (500000 - 1) + 1); // create client id inside client object
+            emptyVar.requestId = dentistId + parseInt(Math.random() * ((dentistId * 153) / 2 - 1) + 1);; // create requestId variable inside client object
+            emptyVar.dentistID = dentistId; // create requestId variable inside client object
+
+            var modifyDateFormat = JSON.parse(timeChosen)
+            var splitUpString = timeChosen.split('/');
+            var year = splitUpString[0]
+            var month = splitUpString[1]
+            var day = splitUpString[2]
+            var hour = splitUpString[4]
+            var minute = splitUpString[5]
+            var yearWithoutQuotes = year.replace(/"/g, ''); // remove the quotes 
+            var minuteWithoutQuotes = minute.replace(/"/g, ''); // remove the quotes 
+
+            emptyVar.date = yearWithoutQuotes + "-" + month + "-" + day + " " + hour + ":" + minuteWithoutQuotes;
+
+            emptyVar.clientCoordinates = coordinateChosen
+            return emptyVar;
+
+        }
+
+        function issuanceGenerate(emptyVar) {
+            var currentTime = Date.now();
+            emptyVar.issuance = currentTime; // create issuance variable for client object
+            return emptyVar;
+        }
+
+        var previousTopic2 = null
 
 
-            // access token
-            mapboxgl.accessToken = 'pk.eyJ1IjoibWtvcWF6IiwiYSI6ImNrdnRlanNnZjJ1amcycWtsbmFjN2xscXUifQ.MDV-Vx3y_vY_DM-YFF9eGw'
+        var bookChoice = function(dentistId, time, coordinate) {
+            //console.log(time)
+            var userData = this.clientData(dentistId, time, coordinate)
+            console.log("Booking Request")
+            console.log(userData)
+            client.publish('ramzimkoqaz1984qwe22', userData)
+            if (typeof previousTopic2 !== 'undefined') {
+                client.unsubscribe('ramzimkoqaz1984qwe22')
+            }
+        }
 
-            // javascript to instantiate the map
-            const map = new mapboxgl.Map({
-                container: 'map', // appear in the container with the id called map
-                style: 'mapbox://styles/mapbox/streets-v9', // style URL
-                center: [11.942625, 57.685259], //starting position [lng, lat]
-                zoom: 10, // starting zoom
-            })
-        </script>
 
-        <div id="snackbar"><span id="myText"></span></div>
+        // access token
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWtvcWF6IiwiYSI6ImNrdnRlanNnZjJ1amcycWtsbmFjN2xscXUifQ.MDV-Vx3y_vY_DM-YFF9eGw'
+
+        // javascript to instantiate the map
+        const map = new mapboxgl.Map({
+            container: 'map', // appear in the container with the id called map
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            center: [11.942625, 57.685259], //starting position [lng, lat]
+            zoom: 10, // starting zoom
+        })
+    </script>
+
+    <div id="snackbar"><span id="myText"></span></div>
 
 
 </body>
