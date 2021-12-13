@@ -28,4 +28,3 @@ To run this node we use "npm run dev" command
 #### Link to the main Team-8 documentation ReadMe file
 https://git.chalmers.se/courses/dit355/test-teams-formation/team-8/team-8-project
 
-
