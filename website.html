@@ -460,10 +460,14 @@
                         //show toast for a couple of seconds 
                     userId = JSON.stringify(messageTaken3.userId)
                     requestId = JSON.stringify(messageTaken3.requestId)
-                    time = JSON.stringify(messageTaken3.time)
+                    timeoriginal = JSON.stringify(messageTaken3.time)
+
+
+                    var timeSlicedFirst = timeoriginal.substring(1);
+                    time = timeSlicedFirst.slice(0, -1) //'abcde'
 
                     var successBool
-                    if (time == '"Not Open"') {
+                    if (time == 'Not Open') {
                         time = "No clinic is open at this time"
                         userId = "None"
                         requestId = 'None'
@@ -485,7 +489,7 @@
 
                         document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
 
-                    } else if (time == '"none"') {
+                    } else if (time == 'none') {
                         successBool = "Unsuccessful"
 
                         forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + successBool + "</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
