@@ -484,7 +484,7 @@
 
 
                     var successBool
-                    if (time == '"Not Open"') {
+                    if (time == 'Not Open') {
                         time = "No clinic is open at this time"
                         userId = "None"
                         requestId = 'None'
@@ -504,7 +504,7 @@
                         document.getElementById("myText4").innerHTML = forToast4; // insert it into div (it includes snacbar id)
 
 
-                    } else if (time == '"none"') {
+                    } else if (time == 'none') {
                         successBool = "Unsuccessful"
 
                         forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + successBool + "</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
