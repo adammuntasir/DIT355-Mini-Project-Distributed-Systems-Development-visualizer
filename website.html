@@ -127,11 +127,172 @@
                     position: fixed;
                     z-index: 1;
                     right: 38%;
+                    bottom: 200px;
+                    font-size: 17px;
+                }
+                
+                #snackbar2 {
+                    visibility: hidden;
+                    min-width: 400px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    background-color: #fff;
+                    color: rgb(0, 0, 0);
+                    text-align: center;
+                    border-radius: 2px;
+                    padding: 16px;
+                    position: fixed;
+                    z-index: 1;
+                    right: 38%;
+                    bottom: 150px;
+                    font-size: 17px;
+                }
+                
+                #snackbar3 {
+                    visibility: hidden;
+                    min-width: 400px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    background-color: #fff;
+                    color: rgb(0, 0, 0);
+                    text-align: center;
+                    border-radius: 2px;
+                    padding: 16px;
+                    position: fixed;
+                    z-index: 1;
+                    right: 38%;
                     bottom: 100px;
                     font-size: 17px;
                 }
                 
+                #snackbar4 {
+                    visibility: hidden;
+                    min-width: 400px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    background-color: #fff;
+                    color: rgb(0, 0, 0);
+                    text-align: center;
+                    border-radius: 2px;
+                    padding: 16px;
+                    position: fixed;
+                    z-index: 1;
+                    right: 38%;
+                    bottom: 50px;
+                    font-size: 17px;
+                }
+                
                 #snackbar.show {
+                    visibility: visible;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                }
+                
+                @-webkit-keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 200px;
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 200px;
+                        opacity: 1;
+                    }
+                }
+                
+                @-webkit-keyframes fadeout {
+                    from {
+                        bottom: 200px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes fadeout {
+                    from {
+                        bottom: 200px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                #snackbar2.show {
+                    visibility: visible;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                }
+                
+                @-webkit-keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 150px;
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 150px;
+                        opacity: 1;
+                    }
+                }
+                
+                @-webkit-keyframes fadeout {
+                    from {
+                        bottom: 150px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes fadeout {
+                    from {
+                        bottom: 150px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                #snackbar3.show {
                     visibility: visible;
                     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
                     animation: fadein 0.5s, fadeout 0.5s 2.5s;
@@ -173,6 +334,61 @@
                 @keyframes fadeout {
                     from {
                         bottom: 100px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                #snackbar4.show {
+                    visibility: visible;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                }
+                
+                @-webkit-keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 50px;
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 50px;
+                        opacity: 1;
+                    }
+                }
+                
+                @-webkit-keyframes fadeout {
+                    from {
+                        bottom: 50px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes fadeout {
+                    from {
+                        bottom: 50px;
                         opacity: 1;
                     }
                     to {
@@ -252,23 +468,55 @@
                         userId = "None"
                         requestId = 'None'
                         successBool = "Unsuccessful"
-                        var toStr = ''
-                        forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + successBool + "&nbsp;: No clinic is open at this time")
+
+                        forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + successBool + "</b>&nbsp;")
+
+                        forToast2 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>User Id : </b>" + userId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast3 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Request Id :</b>" + requestId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast4 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Time: </b>" + time + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText2").innerHTML = forToast2; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText3").innerHTML = forToast3; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText4").innerHTML = forToast4; // insert it into div (it includes snacbar id)
+
+
                         document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
 
                     } else if (time == '"none"') {
                         successBool = "Unsuccessful"
 
-                        var toStr = ''
-                        forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + successBool + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>User Id : </b>" + userId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Request Id :</b>" + requestId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Time: </b>" + time + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                        forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + successBool + "</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast2 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>User Id : </b>" + userId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast3 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Request Id :</b>" + requestId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast4 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Time: </b>" + time + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
                         document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText2").innerHTML = forToast2; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText3").innerHTML = forToast3; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText4").innerHTML = forToast4; // insert it into div (it includes snacbar id)
+
 
                     } else {
                         successBool = "Successful"
 
-                        var toStr = ''
-                        forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + successBool + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>User Id : </b>" + userId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Request Id :</b>" + requestId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Time: </b>" + time + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                        forToast = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + successBool + "</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast2 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>User Id : </b>" + userId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast3 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Request Id :</b>" + requestId + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                        forToast4 = ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Time: </b>" + time + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+
                         document.getElementById("myText").innerHTML = forToast; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText2").innerHTML = forToast2; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText3").innerHTML = forToast3; // insert it into div (it includes snacbar id)
+                        document.getElementById("myText4").innerHTML = forToast4; // insert it into div (it includes snacbar id)
                     }
 
 
@@ -277,10 +525,28 @@
                     setTimeout(function() {
                         x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
                     }, 3000);
+
+                    var x2 = document.getElementById("snackbar2"); // get the snackbar div
+                    x2.className = "show"; // add show class (in styles you will see what it is)
+                    setTimeout(function() {
+                        x2.className = x2.className.replace("show", ""); // make it dont show after 6 seconds
+                    }, 3000);
+
+                    var x3 = document.getElementById("snackbar3"); // get the snackbar div
+                    x3.className = "show"; // add show class (in styles you will see what it is)
+                    setTimeout(function() {
+                        x3.className = x2.className.replace("show", ""); // make it dont show after 6 seconds
+                    }, 3000);
+
+
+                    var x4 = document.getElementById("snackbar4"); // get the snackbar div
+                    x4.className = "show"; // add show class (in styles you will see what it is)
+                    setTimeout(function() {
+                        x4.className = x4.className.replace("show", ""); // make it dont show after 6 seconds
+                    }, 3000);
+
                     turnOffButtons = 1
-                    if (Object.values(objectify) == "Not Open") {
-                        console.log("hide markers")
-                    }
+                    if (Object.values(objectify) == "Not Open") {}
 
                 }
                 if (objectify.hasOwnProperty('c')) {
@@ -485,6 +751,9 @@
     </script>
 
     <div id="snackbar"><span id="myText"></span></div>
+    <div id="snackbar2"><span id="myText2"></span></div>
+    <div id="snackbar3"><span id="myText3"></span></div>
+    <div id="snackbar4"><span id="myText4"></span></div>
 
 
 </body>
