@@ -477,7 +477,11 @@
                         //show toast for a couple of seconds 
                     userId = JSON.stringify(messageTaken3.userId)
                     requestId = JSON.stringify(messageTaken3.requestId)
-                    time = JSON.stringify(messageTaken3.time)
+                    timeoriginal = JSON.stringify(messageTaken3.time)
+
+                    var timeSlicedFirst = timeoriginal.substring(1);
+                    time = timeSlicedFirst.slice(0, -1) //'abcde'
+
 
                     var successBool
                     if (time == '"Not Open"') {
