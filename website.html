@@ -119,7 +119,7 @@
                     min-width: 400px;
                     margin-left: auto;
                     margin-right: auto;
-                    background-color: rgb(230, 63, 63);
+                    background-color: rgb(255, 0, 0);
                     color: #fff;
                     text-align: center;
                     border-radius: 2px;
@@ -182,10 +182,27 @@
                     font-size: 17px;
                 }
                 
+                #snackbar5 {
+                    visibility: hidden;
+                    min-width: 400px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    background-color: rgb(255, 0, 0);
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 2px;
+                    padding: 16px;
+                    position: fixed;
+                    z-index: 1;
+                    right: 36%;
+                    bottom: 50px;
+                    font-size: 17px;
+                }
+                
                 #snackbar.show {
                     visibility: visible;
-                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 4.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 4.5s;
                 }
                 
                 @-webkit-keyframes fadein {
@@ -239,8 +256,8 @@
                 
                 #snackbar2.show {
                     visibility: visible;
-                    -webkit-animation: fadein 0.4s, fadeout 0.5s 2.5s;
-                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    -webkit-animation: fadein 0.4s, fadeout 0.5s 4.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 4.5s;
                 }
                 
                 @-webkit-keyframes fadein {
@@ -294,8 +311,8 @@
                 
                 #snackbar3.show {
                     visibility: visible;
-                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-                    animation: fadein 0.4s, fadeout 0.5s 2.5s;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 4.5s;
+                    animation: fadein 0.4s, fadeout 0.5s 4.5s;
                 }
                 
                 @-webkit-keyframes fadein {
@@ -349,8 +366,58 @@
                 
                 #snackbar4.show {
                     visibility: visible;
-                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 4.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 4.5s;
+                }
+                
+                @-webkit-keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 50px;
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes fadein {
+                    from {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                    to {
+                        bottom: 50px;
+                        opacity: 1;
+                    }
+                }
+                
+                @-webkit-keyframes fadeout {
+                    from {
+                        bottom: 50px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes fadeout {
+                    from {
+                        bottom: 50px;
+                        opacity: 1;
+                    }
+                    to {
+                        bottom: 0;
+                        opacity: 0;
+                    }
+                }
+                
+                #snackbar5.show {
+                    visibility: visible;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 4.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 4.5s;
                 }
                 
                 @-webkit-keyframes fadein {
@@ -529,26 +596,26 @@
                     x.className = "show"; // add show class (in styles you will see what it is)
                     setTimeout(function() {
                         x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
-                    }, 3000);
+                    }, 5000);
 
                     var x2 = document.getElementById("snackbar2"); // get the snackbar div
                     x2.className = "show"; // add show class (in styles you will see what it is)
                     setTimeout(function() {
                         x2.className = x2.className.replace("show", ""); // make it dont show after 6 seconds
-                    }, 3000);
+                    }, 5000);
 
                     var x3 = document.getElementById("snackbar3"); // get the snackbar div
                     x3.className = "show"; // add show class (in styles you will see what it is)
                     setTimeout(function() {
                         x3.className = x2.className.replace("show", ""); // make it dont show after 6 seconds
-                    }, 3000);
+                    }, 5000);
 
 
                     var x4 = document.getElementById("snackbar4"); // get the snackbar div
                     x4.className = "show"; // add show class (in styles you will see what it is)
                     setTimeout(function() {
                         x4.className = x4.className.replace("show", ""); // make it dont show after 6 seconds
-                    }, 3000);
+                    }, 5000);
 
                     turnOffButtons = 1
                     if (Object.values(objectify) == "Not Open") {}
@@ -556,8 +623,9 @@
                 }
                 if (objectify.hasOwnProperty('c')) {
                     console.log("Circuit Breaker Opened")
-                    document.getElementById("myText").innerHTML = "Circuit Breaker Open";
-                    var x = document.getElementById("snackbar"); // get the snackbar div
+
+                    document.getElementById("myText5").innerHTML = "Circuit Breaker Open";
+                    var x = document.getElementById("snackbar5"); // get the snackbar div
                     x.className = "show"; // add show class (in styles you will see what it is)
                     setTimeout(function() {
                         document.getElementById("toDisable").disabled = true;
@@ -572,12 +640,12 @@
 
                             var blurDiv = document.getElementById("blurDiv");
                             blurDiv.parentNode.removeChild(blurDiv);
-                        }, 3000); // wait seconds before making the button work again
+                        }, 5000); // wait seconds before making the button work again
                     }, 0); // immediate disable to the button
 
                     setTimeout(function() {
                         x.className = x.className.replace("show", ""); // make it dont show after 6 seconds
-                    }, 3000);
+                    }, 5000);
                 }
 
             }
@@ -759,6 +827,7 @@
     <div id="snackbar2"><span id="myText2"></span></div>
     <div id="snackbar3"><span id="myText3"></span></div>
     <div id="snackbar4"><span id="myText4"></span></div>
+    <div id="snackbar5"><span id="myText5"></span></div>
 
 
 </body>
